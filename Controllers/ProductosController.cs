@@ -21,12 +21,20 @@ namespace TpiBarberShop.Controllers
             _repository = repository;
             _mapper = mapper;
         }
-
+        
         [HttpGet]
         public IActionResult GetProductos()
         {
             var productos = _repository.GetProductos();
             return Ok(_mapper.Map<IEnumerable<ProductoSinPuntoDTO>>(productos));
+
+
+        }
+        [HttpGet("Puntos")]
+        public IActionResult GetProductosPuntos()
+        {
+            var productos = _repository.GetProductosPuntos();
+            return Ok(_mapper.Map<IEnumerable<ProductoDTO>>(productos));
 
 
         }

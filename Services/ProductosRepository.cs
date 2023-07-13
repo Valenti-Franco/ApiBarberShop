@@ -16,7 +16,10 @@ namespace TpiBarberShop.Services
         {
            return _context.Productos.Include(c => c.Puntos).Where(c => c.Id == ProductoId).FirstOrDefault();
         }
-
+        public IEnumerable<EProducto> GetProductosPuntos()
+        {
+            return _context.Productos.Include(c => c.Puntos).OrderBy(x => x.Nombre).ToList();
+        }
         public IEnumerable<EProducto> GetProductos()
         {
            return  _context.Productos.OrderBy(x => x.Nombre).ToList();

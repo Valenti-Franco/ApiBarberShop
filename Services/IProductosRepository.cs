@@ -4,7 +4,9 @@ namespace TpiBarberShop.Services
 {
     public interface IProductosRepository
     {
+        
         public IEnumerable<EProducto> GetProductos();
+        public IEnumerable<EProducto> GetProductosPuntos();
         public EProducto?  GetProducto(int ProductoId);
         public IEnumerable<EPuntos> GetPuntos(int ProductoId);
         public EPuntos? GetPuntos(int ProductoId, int PuntoId);
@@ -17,6 +19,6 @@ namespace TpiBarberShop.Services
         public EUsuarios? GetUsuarios(int idUsuario);
         EPuntos? ObtenerPuntoPorUsuarioId(int usuarioId, int id);
         void ActualizarPunto(EPuntos punto);
-
+        
     }
 }

@@ -44,7 +44,7 @@ namespace TpiBarberShop.Controllers
             var producto = _repository.GetProducto(id);
             if (producto is null)
             {
-                return NotFound();
+                return NotFound("No se encontro el Producto");
             }
 
             return Ok(_mapper.Map<ProductoDTO>(producto));
@@ -60,7 +60,7 @@ namespace TpiBarberShop.Controllers
             var usuarioActual = ObtenerUsuarioActual(usuarioId);
             if (usuarioActual.Role != "Admin")
             {
-                return NotFound();
+                return NotFound("No tenes los permisos para Agregar Productos");
             }
 
             EProducto ProdcutoNuevo = _mapper.Map<EProducto>(productoACrear);
@@ -79,10 +79,10 @@ namespace TpiBarberShop.Controllers
             var usuarioActual = ObtenerUsuarioActual(usuarioId);
             if (usuarioActual.Role != "Admin")
             {
-                return NotFound();
+                return NotFound("No tenes los permisos para actualizar el Producto");
             }
             if (!_repository.ExisteProducto(idProducto))
-                return NotFound();
+                return NotFound("No se encontro el Producto");
 
             var productoAAactulizar = _repository.GetProducto(idProducto);
 
@@ -95,20 +95,21 @@ namespace TpiBarberShop.Controllers
 
         
 
+
         [HttpDelete("{idProducto}/Admin")]
         [Authorize]
-        public ActionResult EliminarProductoAdmin( int idProducto)
+        public ActionResult EliminarProductoAdmin(int idProducto)
         {
 
             var usuarioId = User.FindFirstValue("sub");
             var usuarioActual = ObtenerUsuarioActual(usuarioId);
             if (usuarioActual.Role != "Admin")
             {
-                return NotFound();
+                return NotFound("No se tenes los permisos para eliminar el Producto");
             }
             var productoAEliminar = _repository.GetProducto(idProducto);
             if (productoAEliminar is null)
-                return NotFound();
+                return NotFound("No se encontro el Producto");
 
             _repository.EliminarProducto(productoAEliminar);
             _repository.GuardarCambios();
@@ -116,6 +117,7 @@ namespace TpiBarberShop.Controllers
             return NoContent();
 
         }
+       
         private EUsuarios ObtenerUsuarioActual(string usuarioId)
         {
             var usuario = _repository.GetUsuarios(int.Parse(usuarioId));

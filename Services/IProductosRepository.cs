@@ -9,7 +9,7 @@ namespace TpiBarberShop.Services
         public IEnumerable<EProducto> GetProductosPuntos();
         public EProducto?  GetProducto(int ProductoId);
         public IEnumerable<EPuntos> GetPuntos(int ProductoId);
-        public EPuntos? GetPuntos(int ProductoId, int PuntoId);
+        public EPuntos? GetPuntosId( int PuntoId);
         bool ExisteProducto(int ProductoId);
         void AgregarPuntoAProducto(int ProductoId, EPuntos punto);
         bool GuardarCambios();
@@ -19,6 +19,7 @@ namespace TpiBarberShop.Services
         public EUsuarios? GetUsuarios(int idUsuario);
         EPuntos? ObtenerPuntoPorUsuarioId(int usuarioId, int id);
         void ActualizarPunto(EPuntos punto);
-        
+        void ReducirStock(EProducto producto);
+        void AumentarStock(EProducto producto);
     }
 }

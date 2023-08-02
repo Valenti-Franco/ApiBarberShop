@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using TpiBarberShop.DTOs;
 
 namespace TpiBarberShop.Entities
 {
@@ -22,6 +23,9 @@ namespace TpiBarberShop.Entities
 
         [Required]
         public string Role { get; set; }
+
+        public List<CompraSinUserDTO> Compras { get; set; } = new List<CompraSinUserDTO>();
+
 
         public EUsuarios(string nombre)
         {

@@ -1,4 +1,6 @@
-﻿namespace TpiBarberShop.DTOs
+﻿using TpiBarberShop.Entities;
+
+namespace TpiBarberShop.DTOs
 {
     public class UsuariosDTO
     {
@@ -9,6 +11,9 @@
         public string Password { get; set; } = string.Empty;
 
         public string Role { get; set; } = string.Empty;
+
+     
+
 
     }
 }

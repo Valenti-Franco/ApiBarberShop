@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TpiBarberShop.DBContexts;
 
@@ -10,76 +11,14 @@ using TpiBarberShop.DBContexts;
 namespace TpiBarberShop.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20230715080156_ProductosCompra")]
+    partial class ProductosCompra
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.8");
-
-            modelBuilder.Entity("TpiBarberShop.DTOs.CompraSinUserDTO", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("EUsuariosId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Estado")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("ProductoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EUsuariosId");
-
-                    b.ToTable("CompraSinUserDTO");
-                });
-
-            modelBuilder.Entity("TpiBarberShop.Entities.ECompras", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("ProductoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductoId");
-
-                    b.ToTable("Compras");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Estado = "pendiente",
-                            ProductoId = 1,
-                            UsuarioId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Estado = "confirmada",
-                            ProductoId = 2,
-                            UsuarioId = 2
-                        });
-                });
 
             modelBuilder.Entity("TpiBarberShop.Entities.EProducto", b =>
                 {
@@ -90,18 +29,25 @@ namespace TpiBarberShop.Migrations
                     b.Property<string>("Descripcion")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("EUsuariosId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("EUsuariosId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Precio")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("Stock")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EUsuariosId");
+
+                    b.HasIndex("EUsuariosId1");
 
                     b.ToTable("Productos");
 
@@ -111,7 +57,6 @@ namespace TpiBarberShop.Migrations
                             Id = 1,
                             Descripcion = "Navaja Filosa",
                             Nombre = "Navaja",
-                            Precio = 5,
                             Stock = 40
                         },
                         new
@@ -119,15 +64,13 @@ namespace TpiBarberShop.Migrations
                             Id = 2,
                             Descripcion = "Gel de pelo",
                             Nombre = "Gel",
-                            Precio = 15,
-                            Stock = 100
+                            Stock = 10
                         },
                         new
                         {
                             Id = 3,
                             Descripcion = "Maquinita para cortar",
                             Nombre = "Maquinita",
-                            Precio = 80,
                             Stock = 15
                         });
                 });
@@ -272,22 +215,15 @@ namespace TpiBarberShop.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TpiBarberShop.DTOs.CompraSinUserDTO", b =>
+            modelBuilder.Entity("TpiBarberShop.Entities.EProducto", b =>
                 {
                     b.HasOne("TpiBarberShop.Entities.EUsuarios", null)
-                        .WithMany("Compras")
+                        .WithMany("ProductosComprados")
                         .HasForeignKey("EUsuariosId");
-                });
 
-            modelBuilder.Entity("TpiBarberShop.Entities.ECompras", b =>
-                {
-                    b.HasOne("TpiBarberShop.Entities.EProducto", "Producto")
-                        .WithMany()
-                        .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Producto");
+                    b.HasOne("TpiBarberShop.Entities.EUsuarios", null)
+                        .WithMany("ProductosPendientes")
+                        .HasForeignKey("EUsuariosId1");
                 });
 
             modelBuilder.Entity("TpiBarberShop.Entities.EPuntos", b =>
@@ -308,7 +244,9 @@ namespace TpiBarberShop.Migrations
 
             modelBuilder.Entity("TpiBarberShop.Entities.EUsuarios", b =>
                 {
-                    b.Navigation("Compras");
+                    b.Navigation("ProductosComprados");
+
+                    b.Navigation("ProductosPendientes");
                 });
 #pragma warning restore 612, 618
         }

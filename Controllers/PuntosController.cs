@@ -10,7 +10,7 @@ using TpiBarberShop.Services;
 
 namespace TpiBarberShop.Controllers
 {
-    [Route("api/productos/{id}/puntos")]
+    [Route("api/puntos")]
     [ApiController]
     public class PuntosController : ControllerBase
     {
@@ -22,28 +22,28 @@ namespace TpiBarberShop.Controllers
             _repository = repository;
             _mapper = mapper;
         }
-        [HttpGet]
-        public ActionResult<List<PuntosDTO>> GetPuntos(int id)
+        [HttpGet("Producto/{idProducto}")]
+        public ActionResult<List<PuntosDTO>> GetPuntos(int idProducto)
         {
             
-            if(!_repository.ExisteProducto(id))
-                return NotFound();
+            if(!_repository.ExisteProducto(idProducto))
+                return NotFound("El producto no existe");
 
-            List<Entities.EPuntos>? puntos = _repository.GetPuntos(id).ToList();
+            List<Entities.EPuntos>? puntos = _repository.GetPuntos(idProducto).ToList();
             return Ok(_mapper.Map<List<PuntosDTO>>(puntos));
         }
 
         [HttpGet("{idPunto}")]
 
-        public ActionResult<PuntosDTO> GetPuntos(int id, int idPunto)
+        public ActionResult<PuntosDTO> GetPuntosId( int idPunto)
         {
-            if (!_repository.ExisteProducto(id))
-                return NotFound();
-            Entities.EPuntos? punto = _repository.GetPuntos(id, idPunto);
+
+            Entities.EPuntos? punto = _repository.GetPuntosId(idPunto);
 
             if (punto is null)
             {
-                return NotFound();  
+                return NotFound("El punto no existe");
+
             }
             return Ok(_mapper.Map<PuntosDTO>(punto));
 
@@ -51,130 +51,90 @@ namespace TpiBarberShop.Controllers
 
         }
 
-        [HttpPost]
-        public ActionResult<PuntosDTO> CreacionPunto(int id, PuntosCreacionDTO puntoACrear)
+        [HttpPost("{idProducto}")]
+        [Authorize]
+        public ActionResult<PuntosDTO> CreacionPunto(int idProducto, PuntosCreacionDTO puntoACrear)
         {
-            if (!_repository.ExisteProducto(id))
-                return NotFound();
+            if (!_repository.ExisteProducto(idProducto))
+                return NotFound("El producto no existe");
 
-            var usuarioId = User.FindFirstValue("sub");
-            if (usuarioId == null)
-                return NotFound();
-            
+
+            var usuarioId = User.FindFirstValue("sub");   
 
             var usuarioActual = ObtenerUsuarioActual(usuarioId);
 
-            var puntoExistente = _repository.ObtenerPuntoPorUsuarioId(usuarioActual.Id, id);
-            if (puntoExistente?.ProductoId == id )
-                return NotFound();
+            var puntoExistente = _repository.ObtenerPuntoPorUsuarioId(usuarioActual.Id, idProducto);
+            if (puntoExistente?.ProductoId == idProducto)
+                return NotFound("El punto ya fue creado");
 
 
             var puntoNuevo = _mapper.Map<Entities.EPuntos>(puntoACrear);
             puntoNuevo.Nombre = usuarioActual.Nombre;
             puntoNuevo.UsuarioId = usuarioActual.Id;
-            _repository.AgregarPuntoAProducto(id, puntoNuevo);
+            _repository.AgregarPuntoAProducto(idProducto, puntoNuevo);
 
 
             _repository.GuardarCambios();
 
-            return Ok("Punto Enviado"); // Devuelve el punto creado
+            return Ok("Punto Creado"); // Devuelve el punto creado
         }
 
         [HttpPut("{idPunto}")]
         [Authorize]
-        public ActionResult ActualizarPunto(int id, int idPunto, PuntosActualizarDTO puntoActualizado)
+        public ActionResult ActualizarPunto( int idPunto, PuntosActualizarDTO puntoActualizado)
         {
             var usuarioId = User.FindFirstValue("sub");
             var usuarioActual = ObtenerUsuarioActual(usuarioId);
 
             
 
-            if (!_repository.ExisteProducto(id))
-                return NotFound();
 
-            var puntoAAactulizar = _repository.GetPuntos(id, idPunto);
-
-            if (usuarioActual.Id != puntoAAactulizar?.UsuarioId)
-            {
-                return Forbid();
-            }
-
+            var puntoAAactulizar = _repository.GetPuntosId( idPunto);
             if (puntoAAactulizar is null)
-                return NotFound();
+                return NotFound("El Punto no existe");
+            if (usuarioActual.Role != "Admin")
+            {
+                if (usuarioActual.Id != puntoAAactulizar?.UsuarioId)
+                {
+                    return Forbid("No tenes los permisos para editar este Punto");
+                }
+            }       
 
             _mapper.Map(puntoActualizado, puntoAAactulizar);
             _repository.GuardarCambios();
 
-            return NoContent();
+            return Ok("Punto Editado correctamente");
         }
 
-        [HttpPut("{idPunto}/Admin")]
-        [Authorize]
-        public ActionResult ActualizarPuntoAdmin(int id, int idPunto, PuntosActualizarDTO puntoActualizado)
-        {
-            var usuarioId = User.FindFirstValue("sub");
-            var usuarioActual = ObtenerUsuarioActual(usuarioId);
-            if (usuarioActual.Role != "Admin")
-            {
-                return NotFound();
-            }
-            if (!_repository.ExisteProducto(id))
-                return NotFound();
-
-            var puntoAAactulizar = _repository.GetPuntos(id, idPunto);
-            
-            if (puntoAAactulizar is null)
-                return NotFound();
-
-            _mapper.Map(puntoActualizado, puntoAAactulizar);
-            _repository.GuardarCambios();
-
-            return NoContent();
-        }
-
-        [HttpDelete("{idPunto}/Admin")]
-        
-        public ActionResult EliminarPuntoAdmin(int id, int idPunto)
-        {
-            var usuarioId = User.FindFirstValue("sub");
-            var usuarioActual = ObtenerUsuarioActual(usuarioId);
-            if (usuarioActual.Role != "Admin")
-            {
-                return NotFound();
-            }
-            if (!_repository.ExisteProducto(id))
-                return NotFound();
-
-            var puntoAEliminar = _repository.GetPuntos(id, idPunto);
-            if (puntoAEliminar is null)
-                return NotFound();
-
-            _repository.EliminarPunto(puntoAEliminar);
-            _repository.GuardarCambios();
-
-            return NoContent();
-
-        }
+      
 
         [HttpDelete("{idPunto}")]
-        public ActionResult EliminarPunto(int id, int idPunto)
+        [Authorize]
+
+        public ActionResult EliminarPunto( int idPunto)
         {
-            var puntoAEliminar = _repository.GetPuntos(id, idPunto);
+           
+            var puntoAEliminar = _repository.GetPuntosId(idPunto);
             if (puntoAEliminar is null)
-                return NotFound();
+                return NotFound("El punto no existe");
 
             var usuarioId = User.FindFirstValue("sub");
             var usuarioActual = ObtenerUsuarioActual(usuarioId);
-            if (usuarioActual.Id != puntoAEliminar.UsuarioId)
+
+            if (usuarioActual.Role != "Admin")
             {
-                return Forbid();
+                if (usuarioActual.Id != puntoAEliminar.UsuarioId)
+                {
+                    return Forbid("No tenes los permisos para eliminar este Punto");
+                }
             }
             
 
             _repository.EliminarPunto(puntoAEliminar);
             _repository.GuardarCambios();
 
-            return NoContent();
+            return Ok("Punto Eliminado correctamente");
+
 
         }
 

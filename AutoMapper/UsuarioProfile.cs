@@ -10,6 +10,10 @@ namespace TpiBarberShop.AutoMapper
             CreateMap<Entities.EUsuarios, UsuariosLoginDTO>();
             CreateMap<DTOs.UsuarioCreacionDTO, Entities.EUsuarios>();
 
+            CreateMap<Entities.EUsuarios, DTOs.UsuariosDTO>();
+            CreateMap<DTOs.UsuariosDTO, Entities.EUsuarios>();
+
+
 
         }
     }

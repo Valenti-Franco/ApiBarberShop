@@ -19,34 +19,66 @@ namespace TpiBarberShop.Controllers
     {
 
         private readonly IUsuariosRepository _repository;
+        private readonly IComprasRepository _ComprasRepository;
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
 
-        public UsuariosController(IUsuariosRepository repository, IMapper mapper, IConfiguration config)
+        public UsuariosController(IUsuariosRepository repository, IComprasRepository ComprasRepository, IMapper mapper, IConfiguration config)
         {
             _repository = repository;
             _config = config;
             _mapper = mapper;
+            _ComprasRepository = ComprasRepository;
         }
 
-        [HttpGet]
+        [HttpGet("Admin")]
+        [Authorize]
         public IActionResult GetUsuarios()
         {
-            return Ok(_repository.GetUsuarios());
 
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
 
+            if (usuarioActual.Role != "Admin")
+            {
+                    return NotFound("No tenes los permisos para ver los usuarios");
+            }
+            var usuarios = _repository.GetUsuarios();
+            var usuariosDTO = _mapper.Map<List<UsuariosDTO>>(usuarios);
+            return Ok(usuariosDTO);
         }
+
         [HttpGet("{id}")]
+        [Authorize]
         public IActionResult GetUsuarios(int id)
         {
             var usuario = _repository.GetUsuarios(id);
             if (usuario is null)
             {
-                return NotFound();
+                return NotFound("El usuario no existe");
             }
-            return Ok(usuario);
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
 
+            if (usuarioActual.Role != "Admin")
+            {
+                if (usuarioActual.Id != id)
+                    return NotFound("No tenes los permisos para ver este usuario");
 
+            }
+
+          
+
+            var compras = _ComprasRepository.GetComprasByUsuarioId(id);
+            var comprasDTO = _mapper.Map<List<CompraSinUserDTO>>(compras);
+            if (comprasDTO.Count > 0)
+            {
+                usuario.Compras = comprasDTO;
+                
+                return Ok(usuario);
+            }
+
+            return Ok(_mapper.Map<UsuariosDTO>(usuario));
         }
         [HttpPost("authenticate")] //Vamos a usar un POST ya que debemos enviar los datos para hacer el login
         public ActionResult<string> Autenticar(UsuariosLoginDTO usuario) //Enviamos como parámetro la clase que creamos arriba
@@ -55,7 +87,7 @@ namespace TpiBarberShop.Controllers
             var user = ValidateCredentials(usuario); //Lo primero que hacemos es llamar a una función que valide los parámetros que enviamos.
 
             if (user is null) //Si el la función de arriba no devuelve nada es porque los datos son incorrectos, por lo que devolvemos un Unauthorized (un status code 401).
-                return Unauthorized();
+                return Unauthorized("Usuario o Contraseña incorrectas");
 
             var securityPassword = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_config["Authentication:SecretForKey"])); //Traemos la SecretKey del Json. agregar antes: using Microsoft.IdentityModel.Tokens;
 
@@ -93,7 +125,7 @@ namespace TpiBarberShop.Controllers
             var usuarioActual = ObtenerUsuarioActual(usuarioId);
             if (usuarioActual.Role != "Admin")
             {
-                return NotFound();
+                return NotFound("No tenes los permisos para craer un usuario");
             }
 
             EUsuarios UsuarioNuevo = _mapper.Map<EUsuarios>(usuarioACrear);
@@ -104,53 +136,33 @@ namespace TpiBarberShop.Controllers
             return Ok();
         }
 
+    
+
         [HttpPut("{id}")]
-        
-        public IActionResult EditarNombreUsuario(int id, [FromBody] EditarNombreUsuarioDTO nombreUsuarioDto)
-        {
-            var usuario = _repository.GetUsuarios(id);
-            if (usuario is null)
-            {
-                return NotFound();
-            }
-            var usuarioId = User.FindFirstValue("sub");
-
-            var usuarioActual = ObtenerUsuarioActual(usuarioId);
-            if (usuarioActual.Id != id)
-            {
-                return Forbid();
-            }
-
-            usuario.Nombre = nombreUsuarioDto.Nombre;
-            _repository.GuardarCambios();
-
-            return Ok(usuario);
-        }
-
-        [HttpPut("{id}/Admin")]
         [Authorize]
         public IActionResult EditarNombreUsuarioAdmin(int id, [FromBody] EditarNombreUsuarioDTO nombreUsuarioDto)
         {
             var usuario = _repository.GetUsuarios(id);
             if (usuario is null)
             {
-                return NotFound();
+                return NotFound("El usuario no existe");
             }
+
             var usuarioId = User.FindFirstValue("sub");
-            if (usuarioId == null)
-            {
-                return NotFound();
-            }
             var usuarioActual = ObtenerUsuarioActual(usuarioId);
             if (usuarioActual.Role != "Admin")
             {
-                return NotFound();
+                if (usuarioActual.Id != id)
+                    return NotFound("No tenes los permisos para editar este usuario");
+
             }
+
+           
 
             usuario.Nombre = nombreUsuarioDto.Nombre;
             _repository.GuardarCambios();
 
-            return Ok(usuario);
+            return Ok("Nombre editado correctamente");
         }
 
         private EUsuarios ObtenerUsuarioActual(string usuarioId)
@@ -171,14 +183,10 @@ namespace TpiBarberShop.Controllers
                 return NotFound();
 
             var usuarioId = User.FindFirstValue("sub");
-            if (usuarioId == null )
-            {
-                return NotFound();
-            }
             var usuarioActual = ObtenerUsuarioActual(usuarioId);
             if (usuarioActual.Role != "Admin")
             {
-                return NotFound();
+                return NotFound("No tenes los permisos para eliminar este usuario");
             }
 
             _repository.EliminarUsuario(usuarioAEliminar);

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TpiBarberShop.DBContexts;
 
@@ -10,9 +11,11 @@ using TpiBarberShop.DBContexts;
 namespace TpiBarberShop.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20230801020025_precioProducto")]
+    partial class precioProducto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.8");
@@ -120,7 +123,7 @@ namespace TpiBarberShop.Migrations
                             Descripcion = "Gel de pelo",
                             Nombre = "Gel",
                             Precio = 15,
-                            Stock = 100
+                            Stock = 10
                         },
                         new
                         {

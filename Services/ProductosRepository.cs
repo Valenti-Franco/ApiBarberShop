@@ -30,9 +30,9 @@ namespace TpiBarberShop.Services
             return _context.Puntos.Where(p => p.ProductoId == ProductoId).ToList();
         }
 
-        public EPuntos? GetPuntos(int ProductoId, int PuntoId)
+        public EPuntos? GetPuntosId( int PuntoId)
         {
-            return _context.Puntos.Where(c => c.Id == PuntoId && c.ProductoId == ProductoId).FirstOrDefault();
+            return _context.Puntos.Where(c => c.Id == PuntoId).FirstOrDefault();
         }
 
         public bool ExisteProducto(int ProductoId)
@@ -79,6 +79,28 @@ namespace TpiBarberShop.Services
         public void ActualizarPunto(EPuntos punto)
         {
             _context.Puntos.Update(punto);
+        }
+        public void ReducirStock(EProducto producto)
+        {
+            if (producto != null && producto.Stock > 0)
+            {
+                producto.Stock -= 1;
+                _context.Productos.Update(producto);
+
+            }
+            else
+            {
+                throw new Exception("No hay más stock disponible para este producto");
+            }
+        }
+        public void AumentarStock(EProducto producto)
+        {
+           
+        producto.Stock += 1;
+        _context.Productos.Update(producto);
+
+            
+           
         }
     }
 }

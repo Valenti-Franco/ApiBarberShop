@@ -11,6 +11,6 @@ namespace TpiBarberShop.Services
         public EUsuarios? GetUsuarios(int idUsuario);
         bool GuardarCambios();
         EUsuarios? ValidateUser(UsuariosLoginDTO authParams);
-        //EUsuarios? ValidateUser(UsuariosDTO usuario);
+     
     }
 }

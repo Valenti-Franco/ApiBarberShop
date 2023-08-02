@@ -10,6 +10,7 @@ namespace TpiBarberShop.DBContexts
         public DbSet<EPuntos> Puntos { get; set; }
         public DbSet<EUsuarios> Usuarios { get; set; }
 
+        public DbSet<ECompras> Compras { get; set; }
         public Context(DbContextOptions<Context> options) : base(options)
         {
 
@@ -24,19 +25,24 @@ namespace TpiBarberShop.DBContexts
                 {
                     Id = 1,
                     Descripcion = "Navaja Filosa",
+                    Stock = 40,
+                    Precio = 5
 
                 },
                 new EProducto("Gel")
                 {
                     Id = 2,
                     Descripcion = "Gel de pelo",
+                    Stock = 100,
+                    Precio = 15
 
                 },
                 new EProducto("Maquinita")
                 {
                     Id = 3,
                     Descripcion = "Maquinita para cortar",
-
+                    Stock = 15,
+                    Precio = 80
                 }
 
             };
@@ -103,7 +109,8 @@ namespace TpiBarberShop.DBContexts
                      Id = 1,
                      Email = "jose@jose.com",
                      Password = "123",
-                     Role = "Cliente"
+                     Role = "Cliente",
+
 
                  },
                  new EUsuarios("Franco")
@@ -111,7 +118,8 @@ namespace TpiBarberShop.DBContexts
                      Id = 2,
                      Email = "Franco@Franco.com",
                      Password = "123",
-                     Role = "Admin"
+                     Role = "Admin",
+
 
                  },
                  new EUsuarios("Pepito")
@@ -121,10 +129,27 @@ namespace TpiBarberShop.DBContexts
                      Password = "123",
                      Role = "Cliente",
 
+
                  }
                  );
+            modelBuilder.Entity<ECompras>().HasData(
+                new ECompras
+                {
+                    Id = 1,
+                    UsuarioId = 1, 
+                    ProductoId = 1, 
+                    Estado = "pendiente"
+                },
+                new ECompras
+                {
+                    Id = 2,
+                    UsuarioId = 2, 
+                    ProductoId = 2,
+                    Estado = "confirmada"
+                }
+                );
 
-             base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);
         }
 
        

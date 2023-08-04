@@ -73,6 +73,12 @@ namespace TpiBarberShop.Services
         {
             _context.Compras.Remove(compra);
         }
+        public void EliminarCompraUser(int usuarioid)
+        {
+            var comprasAEliminar = _context.Compras.Where(c => c.UsuarioId == usuarioid).ToList();
+            _context.Compras.RemoveRange(comprasAEliminar);
+
+        }
         public List<CompraDTO> GetComprasByUsuarioId(int usuarioId)
         {
             var compras = _context.Compras
@@ -89,6 +95,7 @@ namespace TpiBarberShop.Services
 
             return comprasDTO;
         }
+
         public bool GuardarCambios()
         {
             return (_context.SaveChanges() >= 0);

@@ -21,5 +21,6 @@ namespace TpiBarberShop.Services
         void ActualizarPunto(EPuntos punto);
         void ReducirStock(EProducto producto);
         void AumentarStock(EProducto producto);
+        void EliminarPuntoUser(int usuarioId);
     }
 }

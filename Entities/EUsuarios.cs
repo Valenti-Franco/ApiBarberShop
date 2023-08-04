@@ -19,6 +19,7 @@ namespace TpiBarberShop.Entities
 
         [Required]
         [MaxLength(150)]
+
         public string Email { get; set; } 
 
         [Required]

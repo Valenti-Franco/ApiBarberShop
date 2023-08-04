@@ -17,5 +17,6 @@ namespace TpiBarberShop.Services
         void EliminarCompra(ECompras compra);
         bool GuardarCambios();
         List<CompraDTO> GetComprasByUsuarioId(int usuarioId);
+        void EliminarCompraUser(int usuarioid);
     }
 }

@@ -61,6 +61,11 @@ namespace TpiBarberShop.Services
         {
             _context.Puntos.Remove(punto);
         }
+        public void EliminarPuntoUser( int usuarioId)
+        {
+            var puntosAEliminar = _context.Puntos.Where(p => p.UsuarioId == usuarioId).ToList();
+            _context.Puntos.RemoveRange(puntosAEliminar);
+        }
         public void EliminarProducto(EProducto producto)
         {
             _context.Productos.Remove(producto);

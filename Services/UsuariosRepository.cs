@@ -27,7 +27,7 @@ namespace TpiBarberShop.Services
             if (user == null)
                 return null;
 
-           
+
 
             return user;
         }
@@ -37,7 +37,7 @@ namespace TpiBarberShop.Services
             return _context.Usuarios.Find(idUsuario);
         }
 
-         public bool GuardarCambios()
+        public bool GuardarCambios()
         {
             return (_context.SaveChanges() >= 0);
         }
@@ -54,6 +54,15 @@ namespace TpiBarberShop.Services
 
         }
 
+        public bool ExisteNombreUsuario(string nombre)
+        {
+            return _context.Usuarios.Any(u => u.Nombre == nombre);
+        }
+
+        public bool ExisteEmail(string email)
+        {
+            return _context.Usuarios.Any(u => u.Email == email);
+        }
 
         //public EUsuarios? ValidateUser(UsuariosDTO usuario)
         //{

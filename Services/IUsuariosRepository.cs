@@ -7,6 +7,8 @@ namespace TpiBarberShop.Services
     {
         void AgregarUsuario(EUsuarios usuarioNuevo);
         void EliminarUsuario(EUsuarios usuario);
+        bool ExisteEmail(string email);
+        bool ExisteNombreUsuario(string nombre);
         public IEnumerable<EUsuarios> GetUsuarios();
         public EUsuarios? GetUsuarios(int idUsuario);
         bool GuardarCambios();

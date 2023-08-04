@@ -20,15 +20,18 @@ namespace TpiBarberShop.Controllers
 
         private readonly IUsuariosRepository _repository;
         private readonly IComprasRepository _ComprasRepository;
+        private readonly IProductosRepository _ProductoRepository;
+
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
 
-        public UsuariosController(IUsuariosRepository repository, IComprasRepository ComprasRepository, IMapper mapper, IConfiguration config)
+        public UsuariosController(IUsuariosRepository repository, IComprasRepository ComprasRepository, IProductosRepository ProductoRepository, IMapper mapper, IConfiguration config)
         {
             _repository = repository;
             _config = config;
             _mapper = mapper;
             _ComprasRepository = ComprasRepository;
+            _ProductoRepository = ProductoRepository;
         }
 
         [HttpGet("Admin")]
@@ -127,6 +130,16 @@ namespace TpiBarberShop.Controllers
             {
                 return NotFound("No tenes los permisos para craer un usuario");
             }
+            if (_repository.ExisteNombreUsuario(usuarioACrear.Nombre))
+            {
+                return BadRequest("El nombre de usuario ya existe.");
+            }
+
+            
+            if (_repository.ExisteEmail(usuarioACrear.Email))
+            {
+                return BadRequest("El correo electrónico ya existe.");
+            }
 
             EUsuarios UsuarioNuevo = _mapper.Map<EUsuarios>(usuarioACrear);
 
@@ -188,6 +201,13 @@ namespace TpiBarberShop.Controllers
             {
                 return NotFound("No tenes los permisos para eliminar este usuario");
             }
+
+             _ProductoRepository.EliminarPuntoUser(idUsuario);
+            
+
+            // Eliminar las compras asociadas al usuario
+            _ComprasRepository.EliminarCompraUser(idUsuario);
+
 
             _repository.EliminarUsuario(usuarioAEliminar);
             _repository.GuardarCambios();

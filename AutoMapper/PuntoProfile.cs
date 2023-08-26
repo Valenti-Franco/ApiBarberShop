@@ -8,7 +8,11 @@ namespace TpiBarberShop.AutoMapper
         public PuntoProfile()
         {
             CreateMap<Entities.EPuntos, DTOs.PuntosDTO>();
-            CreateMap<DTOs.PuntosDTO, Entities.EPuntos>(); 
+            CreateMap<DTOs.PuntosDTO, Entities.EPuntos>();
+
+
+            CreateMap<Entities.EPuntos, DTOs.PuntosFilterDTO>();
+     
             CreateMap<DTOs.PuntosCreacionDTO, Entities.EPuntos>();
             CreateMap<DTOs.PuntosActualizarDTO, Entities.EPuntos>();
 

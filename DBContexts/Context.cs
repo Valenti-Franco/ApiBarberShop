@@ -11,6 +11,20 @@ namespace TpiBarberShop.DBContexts
         public DbSet<EUsuarios> Usuarios { get; set; }
 
         public DbSet<ECompras> Compras { get; set; }
+        public DbSet<ECategory> Category { get; set; }
+
+        public DbSet<ESubcategory> SubCategory { get; set; }
+        public DbSet<EOrdenCompra> OrdenCompras { get; set; }
+
+        public DbSet<EDetalleCompra> DetalleCompra { get; set; }
+
+        public DbSet<EImagenUsuario> ImagenUsuarios { get; set; }
+        public DbSet<EImagenProducto> ImagenProductos { get; set; }
+
+
+
+
+
         public Context(DbContextOptions<Context> options) : base(options)
         {
 
@@ -18,35 +32,43 @@ namespace TpiBarberShop.DBContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             var Productos = new EProducto[3]
             {
-
-                new EProducto("Navaja")
-                {
-                    Id = 1,
-                    Descripcion = "Navaja Filosa",
-                    Stock = 40,
-                    Precio = 5
-
-                },
-                new EProducto("Gel")
-                {
-                    Id = 2,
-                    Descripcion = "Gel de pelo",
-                    Stock = 100,
-                    Precio = 15
-
-                },
-                new EProducto("Maquinita")
-                {
-                    Id = 3,
-                    Descripcion = "Maquinita para cortar",
-                    Stock = 15,
-                    Precio = 80
-                }
-
+        new EProducto("Navaja")
+        {
+            Id = 1,
+            Descripcion = "Navaja",
+            Stock = 40,
+            Precio = 5,
+            CategoryId = 2,
+            SubcategoryId = 1,
+          
+        },
+        new EProducto("Gel")
+        {
+            Id = 2,
+            Descripcion = "Gel de pelo",
+            Stock = 100,
+            Precio = 15,
+            CategoryId = 1,
+            SubcategoryId = 1,
+        
+        },
+        new EProducto("Maquinita")
+        {
+            Id = 3,
+            Descripcion = "Maquinita para cortar",
+            Stock = 15,
+            Precio = 80,
+            CategoryId = 1,
+            SubcategoryId = 1,
+           
+        }
             };
+
             modelBuilder.Entity<EProducto>().HasData(Productos);
+
 
             modelBuilder.Entity<EPuntos>().HasData(
                 new EPuntos(3)
@@ -136,19 +158,86 @@ namespace TpiBarberShop.DBContexts
                 new ECompras
                 {
                     Id = 1,
-                    UsuarioId = 1, 
-                    ProductoId = 1, 
+                    UsuarioId = 1,
+                    ProductoId = 1,
+                    Cantidad = 2,
                     Estado = "pendiente"
                 },
                 new ECompras
                 {
                     Id = 2,
-                    UsuarioId = 2, 
+                    UsuarioId = 2,
                     ProductoId = 2,
+                    Cantidad = 4,
                     Estado = "confirmada"
                 }
                 );
+            modelBuilder.Entity<ECategory>().HasData(
+               new ECategory("Tijera")
+               {
+                   Id = 1,
+                   Descripcion = "es una tijera"
 
+               },
+               new ECategory("Maquinita")
+               {
+                   Id = 2,
+                   Descripcion = "maquinita good"
+
+               }
+               );
+            modelBuilder.Entity<ESubcategory>().HasData(
+               new ESubcategory("Tijeras")
+               {
+                   Id = 1,
+                   CategoryId = 2,
+
+               },
+               new ESubcategory("Maquinita")
+               {
+                   Id = 2,
+                   CategoryId = 1
+
+               }
+               );
+
+            modelBuilder.Entity<EOrdenCompra>().HasData(
+               new EOrdenCompra
+               {
+                   Id = 1,
+                   UsuarioId = 1,
+                   Estado = "confirmada"
+
+
+               },
+               new EOrdenCompra
+               {
+                   Id = 2,
+                   UsuarioId = 2,
+                   Estado = "pendiente"
+
+               }
+               );
+            modelBuilder.Entity<EImagenUsuario>().HasData(
+              new EImagenUsuario
+              {
+                  Id = 1,
+                  UsuarioId= 1,
+                  URL="www.usuarioImagen"
+
+
+              }                    
+            );
+            modelBuilder.Entity<EImagenProducto>().HasData(
+             new EImagenProducto
+             {
+                 Id = 1,
+                 ProductoId = 1,
+                 URL = "www.produtoImagen"
+
+
+             }
+           );
             base.OnModelCreating(modelBuilder);
         }
 

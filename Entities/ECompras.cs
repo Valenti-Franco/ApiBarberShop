@@ -13,16 +13,26 @@ namespace TpiBarberShop.Entities
         [ForeignKey("UsuarioId")]
         public int UsuarioId { get; set; }
 
-        //public EUsuarios Usuario { get; set; }
+        public EUsuarios Usuario { get; set; }
 
-        
+
 
         [ForeignKey("ProductoId")]
         public int ProductoId { get; set; }
         public EProducto Producto { get; set; }
 
-        public string Estado { get; set; }
+        public string Estado { get; set; } = "Pendiente";
 
-        
+        public int Cantidad { get; set; }
+
+        public DateTime FechaPublicado { get; private set; }
+
+        public ECompras()
+        {
+            
+            FechaPublicado = DateTime.Now;
+        }
+
+
     }
 }

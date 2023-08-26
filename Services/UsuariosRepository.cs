@@ -16,7 +16,7 @@ namespace TpiBarberShop.Services
 
         public IEnumerable<EUsuarios> GetUsuarios()
         {
-            return _context.Usuarios.OrderBy(u => u.Nombre).ToList();
+            return _context.Usuarios.Include(c => c.Compras).Include(c => c.Imagenes).ToList();
         }
 
 
@@ -34,7 +34,8 @@ namespace TpiBarberShop.Services
 
         public EUsuarios? GetUsuarios(int idUsuario)
         {
-            return _context.Usuarios.Find(idUsuario);
+            return _context.Usuarios.Include(c => c.Compras).Where(c => c.Id == idUsuario).FirstOrDefault();
+           
         }
 
         public bool GuardarCambios()

@@ -72,14 +72,14 @@ namespace TpiBarberShop.Controllers
 
           
 
-            var compras = _ComprasRepository.GetComprasByUsuarioId(id);
-            var comprasDTO = _mapper.Map<List<CompraSinUserDTO>>(compras);
-            if (comprasDTO.Count > 0)
-            {
-                usuario.Compras = comprasDTO;
+            //var compras = _ComprasRepository.GetComprasByUsuarioId(id);
+            //var comprasDTO = _mapper.Map<ICollection<CompraSinUserDTO>>(compras);
+            //if (comprasDTO.Count > 0)
+            //{
+            //    usuario.Compras = comprasDTO;
                 
-                return Ok(usuario);
-            }
+            //    return Ok(usuario);
+            //}
 
             return Ok(_mapper.Map<UsuariosDTO>(usuario));
         }

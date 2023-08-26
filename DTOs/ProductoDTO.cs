@@ -8,9 +8,15 @@ namespace TpiBarberShop.DTOs
         public string Nombre { get; set; } = string.Empty;
         public string? Descripcion { get; set; }
         public int Precio { get; set; }
+        public int CategoryId { get; set; }
 
-        public IList<PuntosDTO> Puntos { get; set; } = new List<PuntosDTO>();
+
+        public int SubcategoryId { get; set; }
+        public IList<PuntosFilterDTO> Puntos { get; set; }
         public int Stock { get; set; }
+
+
+
 
 
         public int CantidadDePuntos

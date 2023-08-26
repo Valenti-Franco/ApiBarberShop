@@ -37,6 +37,7 @@ namespace TpiBarberShop.Controllers
             return Ok(_mapper.Map<IEnumerable<ProductoDTO>>(productos));
 
 
+
         }
         [HttpGet("{id}")]
         public IActionResult GetProductos(int id)
@@ -47,7 +48,7 @@ namespace TpiBarberShop.Controllers
                 return NotFound("No se encontro el Producto");
             }
 
-            return Ok(_mapper.Map<ProductoDTO>(producto));
+            return Ok(producto);
 
 
         }

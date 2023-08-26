@@ -85,23 +85,23 @@ namespace TpiBarberShop.Services
         {
             _context.Puntos.Update(punto);
         }
-        public void ReducirStock(EProducto producto)
+        public void ReducirStock(EProducto producto, int Cantidad)
         {
-            if (producto != null && producto.Stock > 0)
+            if (producto != null && producto.Stock >= Cantidad)
             {
-                producto.Stock -= 1;
+                producto.Stock -= Cantidad;
                 _context.Productos.Update(producto);
 
             }
             else
             {
-                throw new Exception("No hay más stock disponible para este producto");
+                throw new Exception("No hay suficiente stock disponible de este producto");
             }
         }
-        public void AumentarStock(EProducto producto)
+        public void AumentarStock(EProducto producto, int Cantidad)
         {
            
-        producto.Stock += 1;
+        producto.Stock += Cantidad;
         _context.Productos.Update(producto);
 
             

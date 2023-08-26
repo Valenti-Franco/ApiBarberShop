@@ -45,7 +45,7 @@ builder.Services.AddSwaggerGen(setupAction =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<ProductosData>();
+//builder.Services.AddSingleton<ProductosData>();
 builder.Services.AddSingleton<UsuariosData>();
 
 //builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite(
@@ -55,6 +55,16 @@ builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseS
 builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
 builder.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
 builder.Services.AddScoped<IComprasRepository, ComprasRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
+builder.Services.AddScoped<IOrdenCompraRepository, OrdenCompraRepository>();
+builder.Services.AddScoped<IDetalleCompraRepository, DetalleCompraRepository>();
+builder.Services.AddScoped<IImagesRepository, ImagesRepository>();
+
+
+
+
+
 
 
 builder.Services.AddAuthentication("Bearer") //"Bearer" es el tipo de auntenticación que tenemos que elegir después en PostMan para pasarle el token
@@ -82,6 +92,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(builder =>
+{
+    builder.AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod();
+});
 
 app.UseHttpsRedirection();
 

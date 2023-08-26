@@ -20,17 +20,25 @@ namespace TpiBarberShop.Entities
         [Required]
         [MaxLength(150)]
 
-        public string Email { get; set; } 
+        public string Email { get; set; }
 
         [Required]
         public string Role { get; set; }
+        public ICollection<EImagenUsuario> Imagenes { get; set; }
+        public ICollection<ECompras> Compras { get; set; }
+        public ICollection<EOrdenCompra> OrdenCompra { get; set; }
 
-        public List<CompraSinUserDTO> Compras { get; set; } = new List<CompraSinUserDTO>();
+
+        public DateTime FechaPublicado { get; private set; }
+
+       
 
 
         public EUsuarios(string nombre)
         {
             Nombre = nombre;
+            FechaPublicado = DateTime.Now;
+
         }
     }
 }

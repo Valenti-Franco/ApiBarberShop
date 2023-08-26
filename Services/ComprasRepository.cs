@@ -58,12 +58,13 @@ namespace TpiBarberShop.Services
                 .ToList();
         }
 
-        public void CrearNuevaCompra(int usuarioId, int productoId)
+        public void CrearNuevaCompra(int usuarioId, int productoId, int Cantidad)
         {
             var nuevaCompra = new ECompras
             {
                 UsuarioId = usuarioId,
                 ProductoId = productoId,
+                Cantidad = Cantidad,
                 Estado = "pendiente"
             };
 

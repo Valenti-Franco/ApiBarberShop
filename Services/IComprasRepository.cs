@@ -5,7 +5,7 @@ namespace TpiBarberShop.Services
 {
     public interface IComprasRepository
     {
-        void CrearNuevaCompra(int usuarioId, int productoId);
+        void CrearNuevaCompra(int usuarioId, int productoId, int Cantidad);
 
 
         public IEnumerable<CompraDTO> GetCompras();

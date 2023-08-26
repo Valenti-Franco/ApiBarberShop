@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TpiBarberShop.Entities;
 
 namespace TpiBarberShop.DTOs
 {
@@ -9,6 +10,13 @@ namespace TpiBarberShop.DTOs
         public string? Descripcion { get; set; }
         public int Precio { get; set; }
         public int Stock { get; set; }
+
+        public int CategoryId { get; set; }
+     
+     
+        public int SubcategoryId { get; set; }
+       
+
 
     }
 }

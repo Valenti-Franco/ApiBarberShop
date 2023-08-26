@@ -5,7 +5,7 @@ using AutoMapper;
 using TpiBarberShop.Services;
 using TpiBarberShop.Entities;
 using TpiBarberShop.DTOs;
-using TpiBarberShop.Migrations;
+
 
 namespace TpiBarberShop.Controllers
 {
@@ -24,9 +24,9 @@ namespace TpiBarberShop.Controllers
             _ComprasRepository = ComprasRepository;
             _mapper = mapper;
         }
-        [HttpPost("{id}")]
+        [HttpPost("{id}/{Cantidad}")]
         [Authorize]
-        public ActionResult ComprarProducto(int id)
+        public ActionResult ComprarProducto(int id, int Cantidad)
         {
             var producto = _repository.GetProducto(id);
             
@@ -43,8 +43,8 @@ namespace TpiBarberShop.Controllers
 
                 try
                 {
-                    _ComprasRepository.CrearNuevaCompra(usuarioActual.Id, producto.Id);
-                    _repository.ReducirStock(producto);
+                    _repository.ReducirStock(producto, Cantidad);
+                    _ComprasRepository.CrearNuevaCompra(usuarioActual.Id, producto.Id, Cantidad);
                     _ComprasRepository.GuardarCambios();
                   
 
@@ -162,8 +162,8 @@ namespace TpiBarberShop.Controllers
             var productoId = compraAEliminar.ProductoId;
             var producto = _repository.GetProducto(productoId);
 
+            _repository.AumentarStock(producto, compraAEliminar.Cantidad);
             _ComprasRepository.EliminarCompra(compraAEliminar);
-            _repository.AumentarStock(producto);
             _repository.GuardarCambios();
 
             return NoContent();

@@ -23,19 +23,19 @@ namespace TpiBarberShop.Controllers
             _mapper = mapper;
         }
         [HttpGet("Producto/{idProducto}")]
-        public ActionResult<List<PuntosDTO>> GetPuntos(int idProducto)
+        public ActionResult<List<PuntosFilterDTO>> GetPuntos(int idProducto)
         {
             
             if(!_repository.ExisteProducto(idProducto))
                 return NotFound("El producto no existe");
 
             List<Entities.EPuntos>? puntos = _repository.GetPuntos(idProducto).ToList();
-            return Ok(_mapper.Map<List<PuntosDTO>>(puntos));
+            return Ok(_mapper.Map<List<PuntosFilterDTO>>(puntos));
         }
 
         [HttpGet("{idPunto}")]
 
-        public ActionResult<PuntosDTO> GetPuntosId( int idPunto)
+        public ActionResult<PuntosFilterDTO> GetPuntosId( int idPunto)
         {
 
             Entities.EPuntos? punto = _repository.GetPuntosId(idPunto);
@@ -45,7 +45,7 @@ namespace TpiBarberShop.Controllers
                 return NotFound("El punto no existe");
 
             }
-            return Ok(_mapper.Map<PuntosDTO>(punto));
+            return Ok(_mapper.Map<PuntosFilterDTO>(punto));
 
 
 
@@ -53,7 +53,7 @@ namespace TpiBarberShop.Controllers
 
         [HttpPost("{idProducto}")]
         [Authorize]
-        public ActionResult<PuntosDTO> CreacionPunto(int idProducto, PuntosCreacionDTO puntoACrear)
+        public ActionResult<PuntosFilterDTO> CreacionPunto(int idProducto, PuntosCreacionDTO puntoACrear)
         {
             if (!_repository.ExisteProducto(idProducto))
                 return NotFound("El producto no existe");

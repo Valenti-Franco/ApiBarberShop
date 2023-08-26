@@ -12,7 +12,11 @@ namespace TpiBarberShop.DTOs
 
         public string Role { get; set; } = string.Empty;
 
-     
+
+        public IList<CompraSinUserDTO> Compras { get; set; }
+
+        public IList<ImagesUsuarioDTO> Imagenes { get; set; }
+
 
 
     }

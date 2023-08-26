@@ -11,5 +11,8 @@ namespace TpiBarberShop.DTOs
         public int ProductoId { get; set; }
         public ProductoSinPuntoDTO Producto { get; set; }
         public string? Estado { get; set; } = "Pendiente";
+
+        public int Cantidad { get; set; }
+
     }
 }

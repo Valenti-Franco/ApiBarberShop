@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using TpiBarberShop.DTOs;
+using TpiBarberShop.DTOs.Categoria;
 using TpiBarberShop.Entities;
 using TpiBarberShop.Services;
 

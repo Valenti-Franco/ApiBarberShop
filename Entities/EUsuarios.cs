@@ -24,14 +24,14 @@ namespace TpiBarberShop.Entities
 
         [Required]
         public string Role { get; set; }
-        public ICollection<EImagenUsuario> Imagenes { get; set; }
+        public EImagenUsuario Imagen { get; set; }
         public ICollection<ECompras> Compras { get; set; }
         public ICollection<EOrdenCompra> OrdenCompra { get; set; }
 
 
         public DateTime FechaPublicado { get; private set; }
 
-       
+
 
 
         public EUsuarios(string nombre)

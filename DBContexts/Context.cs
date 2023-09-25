@@ -206,7 +206,8 @@ namespace TpiBarberShop.DBContexts
                {
                    Id = 1,
                    UsuarioId = 1,
-                   Estado = "confirmada"
+                   Estado = "confirmada",
+
 
 
                },
@@ -218,6 +219,18 @@ namespace TpiBarberShop.DBContexts
 
                }
                );
+            modelBuilder.Entity<EDetalleCompra>().HasData(
+              new EDetalleCompra
+              {
+                  Id = 1,
+                  OrdenCompraId = 1,
+                  Cantidad = 3,
+                  ProductoId = 1,
+
+
+              }
+            
+              );
             modelBuilder.Entity<EImagenUsuario>().HasData(
               new EImagenUsuario
               {

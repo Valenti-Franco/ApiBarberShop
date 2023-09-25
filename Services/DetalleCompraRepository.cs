@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TpiBarberShop.DBContexts;
-using TpiBarberShop.DTOs;
+using TpiBarberShop.DTOs.Detalle;
+using TpiBarberShop.Entities;
 
 namespace TpiBarberShop.Services
 {
@@ -13,6 +15,19 @@ namespace TpiBarberShop.Services
             _context = context;
             _mapper = mapper;
         }
+
+        public void CreaDetalleCompra(int ordencompraId,int productoId, int cantidad)
+        {
+            var nuevaDetalleCompra = new EDetalleCompra
+            {
+                OrdenCompraId = ordencompraId,
+                ProductoId = productoId,
+                Cantidad = cantidad
+            };
+
+            _context.DetalleCompra.Add(nuevaDetalleCompra);
+        }
+
         public IEnumerable<DetalleCompraDTO> GetDetalleCompra()
         {
             var detalleCompras = _context.DetalleCompra
@@ -21,5 +36,13 @@ namespace TpiBarberShop.Services
 
             return _mapper.Map<List<DetalleCompraDTO>>(detalleCompras);
         }
+
+        public EDetalleCompra GetDetalleCompra(int id)
+        {
+            return _context.DetalleCompra
+                .Where(c => c.Id == id)
+                 .FirstOrDefault();
+        }
+
     }
 }

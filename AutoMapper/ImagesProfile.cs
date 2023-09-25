@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TpiBarberShop.DTOs.Imagen;
 
 namespace TpiBarberShop.AutoMapper
 {
@@ -6,8 +7,18 @@ namespace TpiBarberShop.AutoMapper
     {
         public ImagesProfile()
         {
-            CreateMap<Entities.EImagenUsuario, DTOs.ImagesUsuarioDTO>();
-            CreateMap<DTOs.ImageUsuarioCrearDTO, Entities.EImagenUsuario>();
+            CreateMap<Entities.EImagenUsuario, ImagesUsuarioDTO>();
+            CreateMap<Entities.EImagenProducto, ImagesProductoDTO>();
+
+            CreateMap<ImageUsuarioCrearDTO, Entities.EImagenUsuario>();
+            CreateMap<ImageProductoCrearDTO, Entities.EImagenProducto>();
+
+
+            CreateMap<ImagesUsuarioDTO, Entities.EImagenUsuario>();
+            CreateMap<ImagesProductoDTO, Entities.EImagenProducto>();
+
+
+
 
 
         }

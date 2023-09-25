@@ -4,7 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TpiBarberShop.DTOs;
+using TpiBarberShop.DTOs.Punto;
 using TpiBarberShop.Entities;
 using TpiBarberShop.Services;
 

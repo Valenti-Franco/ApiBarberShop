@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TpiBarberShop.DTOs;
+using TpiBarberShop.DTOs.Categoria;
 using TpiBarberShop.Entities;
 
 namespace TpiBarberShop.Services

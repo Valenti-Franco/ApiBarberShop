@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using TpiBarberShop.DTOs;
+using TpiBarberShop.DTOs.SubCategoria;
 
 namespace TpiBarberShop.AutoMapper
 {
@@ -8,11 +8,11 @@ namespace TpiBarberShop.AutoMapper
         public SubCategoryProfile()
         {
             CreateMap<Entities.ESubcategory, SubcategoryDTO>();
-            CreateMap<DTOs.SubCategoryActualizarDTO, Entities.ESubcategory>();
+            CreateMap<SubCategoryActualizarDTO, Entities.ESubcategory>();
 
 
             CreateMap<Entities.ESubcategory, SubCategoryFilterDTO>();
-            CreateMap<DTOs.SubCategoryFilterDTO, Entities.ESubcategory>();
+            CreateMap<SubCategoryFilterDTO, Entities.ESubcategory>();
         }
 
     }

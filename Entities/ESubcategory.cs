@@ -22,7 +22,7 @@ namespace TpiBarberShop.Entities
 
         public DateTime FechaPublicado { get; private set; }
 
-        
+
         public ESubcategory(string nombre)
         {
             Nombre = nombre;

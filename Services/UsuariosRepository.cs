@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TpiBarberShop.DBContexts;
-using TpiBarberShop.DTOs;
+using TpiBarberShop.DTOs.Usuario;
 using TpiBarberShop.Entities;
 
 namespace TpiBarberShop.Services
@@ -16,7 +16,7 @@ namespace TpiBarberShop.Services
 
         public IEnumerable<EUsuarios> GetUsuarios()
         {
-            return _context.Usuarios.Include(c => c.Compras).Include(c => c.Imagenes).ToList();
+            return _context.Usuarios.Include(c => c.Compras).Include(c => c.Imagen).ToList();
         }
 
 
@@ -34,7 +34,7 @@ namespace TpiBarberShop.Services
 
         public EUsuarios? GetUsuarios(int idUsuario)
         {
-            return _context.Usuarios.Include(c => c.Compras).Where(c => c.Id == idUsuario).FirstOrDefault();
+            return _context.Usuarios.Include(c => c.Compras).Include(c => c.Imagen).Where(c => c.Id == idUsuario).FirstOrDefault();
            
         }
 

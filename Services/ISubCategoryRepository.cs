@@ -1,4 +1,4 @@
-﻿using TpiBarberShop.DTOs;
+﻿using TpiBarberShop.DTOs.SubCategoria;
 using TpiBarberShop.Entities;
 
 namespace TpiBarberShop.Services

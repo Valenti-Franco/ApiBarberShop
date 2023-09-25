@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using TpiBarberShop.DTOs;
+using TpiBarberShop.DTOs.SubCategoria;
 using TpiBarberShop.Entities;
 using TpiBarberShop.Services;
 

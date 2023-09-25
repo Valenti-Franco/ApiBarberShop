@@ -1,4 +1,4 @@
-﻿using TpiBarberShop.DTOs;
+﻿using TpiBarberShop.DTOs.Compra;
 using TpiBarberShop.Entities;
 
 namespace TpiBarberShop.Services

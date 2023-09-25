@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using TpiBarberShop.DTOs.Detalle;
+using TpiBarberShop.DTOs.OrdenCompra;
 
 namespace TpiBarberShop.AutoMapper
 {
@@ -7,10 +9,10 @@ namespace TpiBarberShop.AutoMapper
         public OrdenCompraProfile()
         {
 
-            CreateMap<Entities.EOrdenCompra, DTOs.OrdenCompraDTO>();
-            CreateMap<DTOs.OrdenCompraDTO, Entities.EOrdenCompra>();
+            CreateMap<Entities.EOrdenCompra, OrdenCompraDTO>();
+            CreateMap<OrdenCompraDTO, Entities.EOrdenCompra>();
 
-            CreateMap<Entities.EDetalleCompra, DTOs.DetalleCompraDTO>();
+            CreateMap<Entities.EDetalleCompra, DetalleCompraDTO>();
 
 
 

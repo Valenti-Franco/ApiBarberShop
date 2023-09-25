@@ -2,7 +2,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TpiBarberShop.DTOs;
+using TpiBarberShop.DTOs.Producto;
 using TpiBarberShop.Entities;
 using TpiBarberShop.Services;
 
@@ -48,7 +48,7 @@ namespace TpiBarberShop.Controllers
                 return NotFound("No se encontro el Producto");
             }
 
-            return Ok(producto);
+            return Ok(_mapper.Map<ProductoSinPuntoDTO>(producto));
 
 
         }

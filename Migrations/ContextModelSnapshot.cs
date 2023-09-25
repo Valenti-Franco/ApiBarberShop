@@ -43,14 +43,14 @@ namespace TpiBarberShop.Migrations
                         {
                             Id = 1,
                             Descripcion = "es una tijera",
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1216),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(492),
                             Nombre = "Tijera"
                         },
                         new
                         {
                             Id = 2,
                             Descripcion = "maquinita good",
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1217),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(493),
                             Nombre = "Maquinita"
                         });
                 });
@@ -91,7 +91,7 @@ namespace TpiBarberShop.Migrations
                             Id = 1,
                             Cantidad = 2,
                             Estado = "pendiente",
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1202),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(480),
                             ProductoId = 1,
                             UsuarioId = 1
                         },
@@ -100,7 +100,7 @@ namespace TpiBarberShop.Migrations
                             Id = 2,
                             Cantidad = 4,
                             Estado = "confirmada",
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1204),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(482),
                             ProductoId = 2,
                             UsuarioId = 2
                         });
@@ -131,6 +131,16 @@ namespace TpiBarberShop.Migrations
                     b.HasIndex("ProductoId");
 
                     b.ToTable("DetalleCompra");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Cantidad = 3,
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(522),
+                            OrdenCompraId = 1,
+                            ProductoId = 1
+                        });
                 });
 
             modelBuilder.Entity("TpiBarberShop.Entities.EImagenProducto", b =>
@@ -159,7 +169,7 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 1,
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1261),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(540),
                             ProductoId = 1,
                             URL = "www.produtoImagen"
                         });
@@ -191,7 +201,7 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 1,
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1251),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(531),
                             URL = "www.usuarioImagen",
                             UsuarioId = 1
                         });
@@ -224,14 +234,14 @@ namespace TpiBarberShop.Migrations
                         {
                             Id = 1,
                             Estado = "confirmada",
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1238),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(511),
                             UsuarioId = 1
                         },
                         new
                         {
                             Id = 2,
                             Estado = "pendiente",
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1239),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(513),
                             UsuarioId = 2
                         });
                 });
@@ -277,7 +287,7 @@ namespace TpiBarberShop.Migrations
                             Id = 1,
                             CategoryId = 2,
                             Descripcion = "Navaja",
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(996),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(319),
                             Nombre = "Navaja",
                             Precio = 5,
                             Stock = 40,
@@ -288,7 +298,7 @@ namespace TpiBarberShop.Migrations
                             Id = 2,
                             CategoryId = 1,
                             Descripcion = "Gel de pelo",
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1007),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(328),
                             Nombre = "Gel",
                             Precio = 15,
                             Stock = 100,
@@ -299,7 +309,7 @@ namespace TpiBarberShop.Migrations
                             Id = 3,
                             CategoryId = 1,
                             Descripcion = "Maquinita para cortar",
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1008),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(329),
                             Nombre = "Maquinita",
                             Precio = 80,
                             Stock = 15,
@@ -340,7 +350,7 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 1,
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1164),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(447),
                             Nombre = "Pepito",
                             ProductoId = 1,
                             Puntos = 3,
@@ -349,7 +359,7 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 4,
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1166),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(449),
                             Nombre = "Robert",
                             ProductoId = 1,
                             Puntos = 3,
@@ -358,7 +368,7 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 5,
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1167),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(450),
                             Nombre = "Jesus",
                             ProductoId = 1,
                             Puntos = 3,
@@ -367,7 +377,7 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 2,
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1168),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(450),
                             Nombre = "Jorge",
                             ProductoId = 2,
                             Puntos = 1,
@@ -376,7 +386,7 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 6,
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1169),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(451),
                             Nombre = "Jorge123",
                             ProductoId = 2,
                             Puntos = 2,
@@ -385,7 +395,7 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 7,
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1170),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(452),
                             Nombre = "perro",
                             ProductoId = 2,
                             Puntos = 3,
@@ -394,7 +404,7 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 3,
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1170),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(452),
                             Nombre = "Juanchon",
                             ProductoId = 3,
                             Puntos = 5,
@@ -430,14 +440,14 @@ namespace TpiBarberShop.Migrations
                         {
                             Id = 1,
                             CategoryId = 2,
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1227),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(501),
                             Nombre = "Tijeras"
                         },
                         new
                         {
                             Id = 2,
                             CategoryId = 1,
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1228),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(502),
                             Nombre = "Maquinita"
                         });
                 });
@@ -478,7 +488,7 @@ namespace TpiBarberShop.Migrations
                         {
                             Id = 1,
                             Email = "jose@jose.com",
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1186),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(467),
                             Nombre = "Jose",
                             Password = "123",
                             Role = "Cliente"
@@ -487,7 +497,7 @@ namespace TpiBarberShop.Migrations
                         {
                             Id = 2,
                             Email = "Franco@Franco.com",
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1188),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(468),
                             Nombre = "Franco",
                             Password = "123",
                             Role = "Admin"
@@ -496,7 +506,7 @@ namespace TpiBarberShop.Migrations
                         {
                             Id = 3,
                             Email = "Pepito@Pepito.com",
-                            FechaPublicado = new DateTime(2023, 8, 22, 11, 13, 45, 24, DateTimeKind.Local).AddTicks(1189),
+                            FechaPublicado = new DateTime(2023, 9, 1, 1, 40, 17, 552, DateTimeKind.Local).AddTicks(469),
                             Nombre = "Pepito",
                             Password = "123",
                             Role = "Cliente"

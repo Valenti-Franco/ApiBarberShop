@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -51,6 +53,7 @@ builder.Services.AddSingleton<UsuariosData>();
 //builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite(
 //    builder.Configuration["ConnectionStrings:InfoCiudadesDBConnectionString"]));
 builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:BarberDBConnectionString"]));
+//builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlServer(builder.Configuration["ConnectionStrings:BarberDBConnectionString"]));
 
 builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
 builder.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();

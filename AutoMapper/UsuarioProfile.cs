@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using TpiBarberShop.DTOs;
+using TpiBarberShop.DTOs.Usuario;
 
 namespace TpiBarberShop.AutoMapper
 {
@@ -8,10 +8,10 @@ namespace TpiBarberShop.AutoMapper
         public CategoryProfile()
         {
             CreateMap<Entities.EUsuarios, UsuariosLoginDTO>();
-            CreateMap<DTOs.UsuarioCreacionDTO, Entities.EUsuarios>();
+            CreateMap<UsuarioCreacionDTO, Entities.EUsuarios>();
 
-            CreateMap<Entities.EUsuarios, DTOs.UsuariosDTO>();
-            CreateMap<DTOs.UsuariosDTO, Entities.EUsuarios>();
+            CreateMap<Entities.EUsuarios, UsuariosDTO>();
+            CreateMap<UsuariosDTO, Entities.EUsuarios>();
 
 
 

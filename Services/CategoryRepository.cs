@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TpiBarberShop.DBContexts;
-using TpiBarberShop.DTOs;
+using TpiBarberShop.DTOs.Categoria;
 using TpiBarberShop.Entities;
 
 namespace TpiBarberShop.Services

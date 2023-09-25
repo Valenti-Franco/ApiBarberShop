@@ -19,7 +19,7 @@ namespace TpiBarberShop.Entities
 
         public DateTime FechaPublicado { get; private set; }
 
-    
+
         public ECategory(string nombre)
         {
             Nombre = nombre;

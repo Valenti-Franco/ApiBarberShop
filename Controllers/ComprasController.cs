@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using TpiBarberShop.Services;
 using TpiBarberShop.Entities;
-using TpiBarberShop.DTOs;
-
+using TpiBarberShop.DTOs.Compra;
 
 namespace TpiBarberShop.Controllers
 {

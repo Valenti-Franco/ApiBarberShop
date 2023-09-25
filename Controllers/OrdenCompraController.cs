@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using TpiBarberShop.DTOs;
+using TpiBarberShop.DTOs.OrdenCompra;
 using TpiBarberShop.Services;
 
 namespace TpiBarberShop.Controllers
@@ -42,8 +42,8 @@ namespace TpiBarberShop.Controllers
             return Ok(_mapper.Map<OrdenCompraDTO>(ordenCompra));
 
         }
-        [HttpGet("usuario/{idUsuario}")]
 
+        [HttpGet("usuario/{idUsuario}")]
         public IActionResult GetOrdenCompraUser(int idUsuario)
         {
             var ordenCompra = _OrdenCompraRepository.GetOrdenCompraUser(idUsuario);

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TpiBarberShop.DBContexts;
-using TpiBarberShop.DTOs;
+using TpiBarberShop.DTOs.OrdenCompra;
 using TpiBarberShop.Entities;
 
 namespace TpiBarberShop.Services

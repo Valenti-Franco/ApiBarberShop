@@ -29,7 +29,7 @@ namespace TpiBarberShop.Entities
 
         public ECompras()
         {
-            
+
             FechaPublicado = DateTime.Now;
         }
 

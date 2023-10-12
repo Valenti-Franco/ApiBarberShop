@@ -11,8 +11,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
-
-
+using TpiBarberShop.Utils;
+using TpiBarberShop.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +54,9 @@ builder.Services.AddSingleton<UsuariosData>();
 //    builder.Configuration["ConnectionStrings:InfoCiudadesDBConnectionString"]));
 builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:BarberDBConnectionString"]));
 //builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlServer(builder.Configuration["ConnectionStrings:BarberDBConnectionString"]));
+//buide.services.Configure<MercadoPagoOptions>(Configuration.GetSection("MercadoPago"));
+builder.Services.Configure<MercadoPagoOptions>(builder.Configuration.GetSection("MercadoPago"));
+
 
 builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
 builder.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
@@ -63,7 +66,7 @@ builder.Services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
 builder.Services.AddScoped<IOrdenCompraRepository, OrdenCompraRepository>();
 builder.Services.AddScoped<IDetalleCompraRepository, DetalleCompraRepository>();
 builder.Services.AddScoped<IImagesRepository, ImagesRepository>();
-
+builder.Services.AddScoped<PayPalClientApi>();
 
 
 

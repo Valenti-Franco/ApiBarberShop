@@ -15,5 +15,25 @@ namespace TpiBarberShop.DTOs.Compra
 
         public int Cantidad { get; set; }
 
+        public string pagoId { get; set; }
+
+        public string clientePaypalId { get; set; }
+
+        public string valorPago { get; set; }
+
+        public string fechaPago { get; set; }
+
+        public int Total
+        {
+            get
+            {
+                int sumaDePuntos = 0;
+              
+                  sumaDePuntos += Producto.Precio * Cantidad;
+                
+                return sumaDePuntos;
+            }
+        }
+
     }
 }

@@ -18,6 +18,8 @@ namespace TpiBarberShop.Entities
         public EOrdenCompra OrdenCompra { get; set; }
         public int Cantidad { get; set; }
 
+   
+
         public DateTime FechaPublicado { get; private set; }
 
         public EDetalleCompra()

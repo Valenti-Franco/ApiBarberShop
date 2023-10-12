@@ -16,7 +16,7 @@ namespace TpiBarberShop.Services
             _mapper = mapper;
         }
 
-        public void CreaDetalleCompra(int ordencompraId,int productoId, int cantidad)
+        public void CreaDetalleCompra(int ordencompraId, int productoId, int cantidad)
         {
             var nuevaDetalleCompra = new EDetalleCompra
             {
@@ -25,13 +25,20 @@ namespace TpiBarberShop.Services
                 Cantidad = cantidad
             };
 
-            _context.DetalleCompra.Add(nuevaDetalleCompra);
+            // Obtener la orden de compra correspondiente y agregar el nuevo detalle
+            var ordenCompra = _context.OrdenCompras.Include(o => o.DetalleCompra).FirstOrDefault(o => o.Id == ordencompraId);
+            if (ordenCompra != null)
+            {
+                ordenCompra.DetalleCompra.Add(nuevaDetalleCompra);
+                _context.SaveChanges(); // Entity Framework actualizará el valor total automáticamente
+            }
         }
 
         public IEnumerable<DetalleCompraDTO> GetDetalleCompra()
         {
             var detalleCompras = _context.DetalleCompra
               .OrderBy(x => x.Id)
+              .Include(x => x.Producto)
               .ToList();
 
             return _mapper.Map<List<DetalleCompraDTO>>(detalleCompras);

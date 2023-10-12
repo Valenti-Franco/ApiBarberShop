@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace TpiBarberShop.Entities
 {
@@ -21,7 +22,22 @@ namespace TpiBarberShop.Entities
         public int ProductoId { get; set; }
         public EProducto Producto { get; set; }
 
+
+
+
         public string Estado { get; set; } = "Pendiente";
+
+        public string pagoId { get; set; }
+
+        public string clientePaypalId { get; set; }
+
+        public string valorPago { get; set; }
+
+        public DateTime fechaPago { get; set; }
+
+
+
+
 
         public int Cantidad { get; set; }
 

@@ -18,6 +18,7 @@ namespace TpiBarberShop.Entities
 
         public ICollection<EDetalleCompra> DetalleCompra { get; set; }
 
+      
         public string Estado { get; set; }
 
         public DateTime FechaPublicado { get; private set; }

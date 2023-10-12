@@ -8,6 +8,8 @@ namespace TpiBarberShop.AutoMapper
         public ProductoProfile()
         {
             CreateMap<Entities.EProducto, ProductoSinPuntoDTO>();
+            CreateMap<Entities.EProducto, ProductoPrecioDTO>();
+
             CreateMap<Entities.EProducto, ProductoDTO>();
            
 

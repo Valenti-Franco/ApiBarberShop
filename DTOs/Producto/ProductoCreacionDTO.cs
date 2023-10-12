@@ -13,6 +13,10 @@ namespace TpiBarberShop.DTOs.Producto
         [Required(ErrorMessage = "Agrega un Precio")]
 
         public int Precio { get; set; }
+        public int CategoryId { get; set; }
+
+
+        public int SubcategoryId { get; set; }
 
 
         public string? Descripcion { get; set; }

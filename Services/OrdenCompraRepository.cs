@@ -37,6 +37,8 @@ namespace TpiBarberShop.Services
         {
             var ordenCompras = _context.OrdenCompras
                .Include(c => c.DetalleCompra)
+               .ThenInclude(dc => dc.Producto)
+
                .OrderBy(x => x.Id)
                .ToList();
 
@@ -46,6 +48,7 @@ namespace TpiBarberShop.Services
         {
             return _context.OrdenCompras
                .Include(c => c.DetalleCompra)
+               .ThenInclude(dc => dc.Producto)
                .Where(c => c.Id == id)
                 .FirstOrDefault();
            

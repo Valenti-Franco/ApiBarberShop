@@ -161,7 +161,11 @@ namespace TpiBarberShop.DBContexts
                     UsuarioId = 1,
                     ProductoId = 1,
                     Cantidad = 2,
-                    Estado = "pendiente"
+                    Estado = "pendiente",
+                    clientePaypalId = "",
+                    valorPago = "",
+                    pagoId = "",
+                    fechaPago= DateTime.Now,
                 },
                 new ECompras
                 {
@@ -169,7 +173,11 @@ namespace TpiBarberShop.DBContexts
                     UsuarioId = 2,
                     ProductoId = 2,
                     Cantidad = 4,
-                    Estado = "confirmada"
+                    Estado = "confirmada",
+                    clientePaypalId = "132342f",
+                    valorPago = "100",
+                    pagoId = "123424223",
+                    fechaPago = DateTime.Now,
                 }
                 );
             modelBuilder.Entity<ECategory>().HasData(
@@ -207,6 +215,7 @@ namespace TpiBarberShop.DBContexts
                    Id = 1,
                    UsuarioId = 1,
                    Estado = "confirmada",
+                  
 
 
 
@@ -215,7 +224,8 @@ namespace TpiBarberShop.DBContexts
                {
                    Id = 2,
                    UsuarioId = 2,
-                   Estado = "pendiente"
+                   Estado = "pendiente",
+                   
 
                }
                );

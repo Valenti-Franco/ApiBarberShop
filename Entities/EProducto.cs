@@ -23,8 +23,12 @@ namespace TpiBarberShop.Entities
 
         public string? Descripcion { get; set; }
 
+        [ForeignKey("CategoryId")]
         public int CategoryId { get; set; }
-        //public ECategory category { get; set; }
+        public ECategory category { get; set; }
+
+        [ForeignKey("SubcategoryId")]
+
         public int SubcategoryId { get; set; }
         public ESubcategory Subcategory { get; set; }
 

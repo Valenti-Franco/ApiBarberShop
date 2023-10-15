@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TpiBarberShop.DTOs.Compra;
+using TpiBarberShop.Entities;
 
 namespace TpiBarberShop.AutoMapper
 {
@@ -17,6 +18,10 @@ namespace TpiBarberShop.AutoMapper
             CreateMap<CompraSinUserDTO, CompraDTO>();
             CreateMap<CompraDTO, CompraSinUserDTO>();
             CreateMap<CompraDTO, Entities.ECompras>();
+
+            CreateMap<Entities.ECompras, CompraDTO>()
+    .ForMember(dest => dest.Producto, opt => opt.MapFrom(src => src.Producto))
+    .ForMember(dest => dest.fechaPago, opt => opt.MapFrom(src => src.FechaPublicado != null ? src.FechaPublicado : DateTime.MinValue));
 
 
         }

@@ -35,17 +35,17 @@ namespace TpiBarberShop.Controllers
         }
 
         [HttpGet("Admin")]
-        [Authorize]
+        //[Authorize]
         public IActionResult GetUsuarios()
         {
 
-            var usuarioId = User.FindFirstValue("sub");
-            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+            //var usuarioId = User.FindFirstValue("sub");
+            //var usuarioActual = ObtenerUsuarioActual(usuarioId);
 
-            if (usuarioActual.Role != "Admin")
-            {
-                    return NotFound("No tenes los permisos para ver los usuarios");
-            }
+            //if (usuarioActual.Role != "Admin")
+            //{
+            //        return NotFound("No tenes los permisos para ver los usuarios");
+            //}
             var usuarios = _repository.GetUsuarios();
             var usuariosDTO = _mapper.Map<List<UsuariosDTO>>(usuarios);
             return Ok(usuariosDTO);
@@ -83,6 +83,21 @@ namespace TpiBarberShop.Controllers
 
             return Ok(_mapper.Map<UsuariosDTO>(usuario));
         }
+
+        [HttpGet("ObtenerUsuario")]
+        [Authorize]
+        public IActionResult GetUsuariosToken()
+        {
+
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+
+         
+            return Ok(_mapper.Map<UsuariosDTO>(usuarioActual));
+           
+        }
+
+
         [HttpPost("authenticate")] //Vamos a usar un POST ya que debemos enviar los datos para hacer el login
         public ActionResult<string> Autenticar(UsuariosLoginDTO usuario) //Enviamos como parámetro la clase que creamos arriba
         {

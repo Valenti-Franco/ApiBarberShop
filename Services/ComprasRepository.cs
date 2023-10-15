@@ -18,18 +18,18 @@ namespace TpiBarberShop.Services
         }
 
 
-    public IEnumerable<CompraDTO> GetCompras()
+    public IEnumerable<ECompras> GetCompras()
 {
-    var compras = _context.Compras
-        //.Include(c => c.Usuario)
-        .Include(c => c.Producto)
-        .OrderBy(x => x.Id)
-        .ToList();
+            return _context.Compras
+                //.Include(c => c.Usuario)
+                .Include(c => c.Producto).ToList();
+        //.OrderBy(x => x.Id)
 
-    var comprasDto = _mapper.Map<List<CompraDTO>>(compras);
 
-    return comprasDto;
-}
+            //var comprasDto = _mapper.Map<List<CompraDTO>>(compras);
+
+            //return comprasDto;
+        }
 
         public ECompras GetCompras(int comprasId)
         {

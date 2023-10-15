@@ -61,7 +61,7 @@ namespace TpiBarberShop.Controllers
         }
 
         [HttpGet("Admin")]
-        [Authorize]
+        //[Authorize]
         public IActionResult ObtenerCompras()
         {
             var usuarioId = User.FindFirstValue("sub");
@@ -71,7 +71,8 @@ namespace TpiBarberShop.Controllers
 
             var compras = _ComprasRepository.GetCompras();
 
-        
+
+            //return Ok(_mapper.Map<CompraDTO>(compras));
 
             return Ok(_mapper.Map<IEnumerable<CompraDTO>>(compras));
         }

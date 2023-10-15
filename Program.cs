@@ -50,10 +50,12 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddSingleton<ProductosData>();
 builder.Services.AddSingleton<UsuariosData>();
 
-//builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite(
-//    builder.Configuration["ConnectionStrings:InfoCiudadesDBConnectionString"]));
+//builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:InfoCiudadesDBConnectionString"]));
+//builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite("Filename=./BarberShop.db"));
+
 builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:BarberDBConnectionString"]));
 //builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlServer(builder.Configuration["ConnectionStrings:BarberDBConnectionString"]));
+
 //buide.services.Configure<MercadoPagoOptions>(Configuration.GetSection("MercadoPago"));
 builder.Services.Configure<MercadoPagoOptions>(builder.Configuration.GetSection("MercadoPago"));
 
@@ -93,9 +95,11 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
 if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
+
+    {
+        app.UseSwagger();
     app.UseSwaggerUI();
 }
 

@@ -16,7 +16,9 @@ namespace TpiBarberShop.Services
 
         public IEnumerable<EUsuarios> GetUsuarios()
         {
-            return _context.Usuarios.Include(c => c.Compras).Include(c => c.Imagen).ToList();
+            //return _context.Usuarios.Include(c => c.Compras).ToList();
+            return _context.Usuarios.Include(c => c.Imagen).Include(x => x.Compras).ToList();
+
         }
 
 

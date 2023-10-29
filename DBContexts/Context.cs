@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TpiBarberShop.DTOs;
 using TpiBarberShop.Entities;
+using static System.Net.WebRequestMethods;
 
 namespace TpiBarberShop.DBContexts
 {
@@ -130,8 +131,14 @@ namespace TpiBarberShop.DBContexts
                  {
                      Id = 1,
                      Email = "jose@jose.com",
-                     Password = "123",
+                     Password = "$2a$11$QBfVcDxBTsNMp/NMGTgAZexNBj/epkt5W1z/GNqP1Blk.d2KoExPm",
                      Role = "Cliente",
+                
+
+                     VerificationToken = "adsd",
+                     VerifiedAt = DateTime.Now,
+                     PasswordResetToken = "adasd",
+                     ResetTokenExpires = DateTime.Now,
 
 
                  },
@@ -139,8 +146,13 @@ namespace TpiBarberShop.DBContexts
                  {
                      Id = 2,
                      Email = "Franco@Franco.com",
-                     Password = "123",
+                     Password = "$2a$11$QBfVcDxBTsNMp/NMGTgAZexNBj/epkt5W1z/GNqP1Blk.d2KoExPm",
                      Role = "Admin",
+                   
+                     VerificationToken = "adsd",
+                     VerifiedAt = DateTime.Now,
+                     PasswordResetToken = "adasd",
+                     ResetTokenExpires = DateTime.Now,
 
 
                  },
@@ -148,12 +160,19 @@ namespace TpiBarberShop.DBContexts
                  {
                      Id = 3,
                      Email = "Pepito@Pepito.com",
-                     Password = "123",
+                     Password = "$2a$11$QBfVcDxBTsNMp/NMGTgAZexNBj/epkt5W1z/GNqP1Blk.d2KoExPm",
                      Role = "Cliente",
+         
+                     VerificationToken = "adsd",
+                     VerifiedAt = DateTime.Now,
+                     PasswordResetToken = "adasd",
+                     ResetTokenExpires = DateTime.Now,
+
+
 
 
                  }
-                 );
+                 ) ;
             modelBuilder.Entity<ECompras>().HasData(
                 new ECompras
                 {
@@ -214,8 +233,11 @@ namespace TpiBarberShop.DBContexts
                {
                    Id = 1,
                    UsuarioId = 1,
-                   Estado = "confirmada",
-                  
+                   Estado = "pendiente",
+                   clientePaypalId = "121",
+                   valorPago = "121",
+                   pagoId = "1",
+                   fechaPago = DateTime.Now,
 
 
 
@@ -225,7 +247,10 @@ namespace TpiBarberShop.DBContexts
                    Id = 2,
                    UsuarioId = 2,
                    Estado = "pendiente",
-                   
+                   clientePaypalId = "1",
+                   valorPago = "233",
+                   pagoId = "12",
+                   fechaPago = DateTime.Now,
 
                }
                );
@@ -247,9 +272,12 @@ namespace TpiBarberShop.DBContexts
                   Id = 1,
                   UsuarioId= 1,
                   URL="www.usuarioImagen"
+              }
 
+             
 
-              }                    
+                
+
             );
             modelBuilder.Entity<EImagenProducto>().HasData(
              new EImagenProducto
@@ -260,6 +288,7 @@ namespace TpiBarberShop.DBContexts
 
 
              }
+
            );
             base.OnModelCreating(modelBuilder);
         }

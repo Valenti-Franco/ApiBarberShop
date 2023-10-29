@@ -12,8 +12,7 @@ namespace TpiBarberShop.Services
         public IEnumerable<OrdenCompraDTO> GetOrdenCompraUser(int idUsuario);
         void EliminarOrdenCompra(EOrdenCompra ordencompra);
 
-        void CrearOrdenCompra(int usuarioId);
-
+        EOrdenCompra CrearOrdenCompra(int usuarioId);
 
     }
 }

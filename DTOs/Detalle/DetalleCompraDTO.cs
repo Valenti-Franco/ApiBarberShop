@@ -17,6 +17,7 @@ namespace TpiBarberShop.DTOs.Detalle
         public ProductoPrecioDTO Producto { get; set; }
 
 
+        public DateTime FechaPublicado { get; set; }
 
         public int PrecioTotal
         {

@@ -7,7 +7,8 @@ namespace TpiBarberShop.Services
     {
         public IEnumerable<ImagesUsuarioDTO> GetImageUsuario();
 
-     
+
+        public EImagenProducto GetImagesProductoId(int id);
 
         public EImagenUsuario GetImageUsuario(int id);
 
@@ -22,6 +23,7 @@ namespace TpiBarberShop.Services
         void AgregarImagenProducto(EImagenProducto ImagenNuevo);
 
         bool GuardarCambios();
-
+        void EliminarImagesProducto(EImagenProducto imagen);
+       
     }
 }

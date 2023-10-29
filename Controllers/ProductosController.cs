@@ -48,7 +48,7 @@ namespace TpiBarberShop.Controllers
                 return NotFound("No se encontro el Producto");
             }
 
-            return Ok(_mapper.Map<ProductoSinPuntoDTO>(producto));
+            return Ok(_mapper.Map<ProductoDTO>(producto));
 
 
         }
@@ -59,17 +59,28 @@ namespace TpiBarberShop.Controllers
         {
             var usuarioId = User.FindFirstValue("sub");
             var usuarioActual = ObtenerUsuarioActual(usuarioId);
-            if (usuarioActual.Role != "Admin")
+            if (usuarioActual.Role != "Admin" && usuarioActual.Role != "Editor")
+
             {
                 return NotFound("No tenes los permisos para Agregar Productos");
             }
 
-            EProducto ProdcutoNuevo = _mapper.Map<EProducto>(productoACrear);
+            var productoCreacionDTO = new ProductoCreacionDTOBuilder()
+           .WithNombre(productoACrear.Nombre)
+           .WithStock(productoACrear.Stock)
+           .WithPrecio(productoACrear.Precio)
+           .WithCategoryId(productoACrear.CategoryId)
+           .WithSubcategoryId(productoACrear.SubcategoryId)
+           .WithDescripcion(productoACrear.Descripcion)
+           .Build();
 
-            _repository.AgregarProducto(ProdcutoNuevo);
+            // Usar productoCreacionDTO para agregar un nuevo producto
+
+            var productoNuevo = _mapper.Map<EProducto>(productoCreacionDTO);
+            _repository.AgregarProducto(productoNuevo);
             _repository.GuardarCambios();
 
-            return Ok(_mapper.Map<ProductoDTO>(ProdcutoNuevo));
+            return Ok(_mapper.Map<ProductoDTO>(productoNuevo));
         }
 
         [HttpPut("{idProducto}/Admin")]
@@ -78,7 +89,8 @@ namespace TpiBarberShop.Controllers
         {
             var usuarioId = User.FindFirstValue("sub");
             var usuarioActual = ObtenerUsuarioActual(usuarioId);
-            if (usuarioActual.Role != "Admin")
+            if (usuarioActual.Role != "Admin" && usuarioActual.Role != "Editor")
+
             {
                 return NotFound("No tenes los permisos para actualizar el Producto");
             }
@@ -104,7 +116,8 @@ namespace TpiBarberShop.Controllers
 
             var usuarioId = User.FindFirstValue("sub");
             var usuarioActual = ObtenerUsuarioActual(usuarioId);
-            if (usuarioActual.Role != "Admin")
+            if (usuarioActual.Role != "Admin" && usuarioActual.Role != "Editor")
+
             {
                 return NotFound("No se tenes los permisos para eliminar el Producto");
             }

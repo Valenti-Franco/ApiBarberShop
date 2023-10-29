@@ -44,11 +44,13 @@ namespace TpiBarberShop.Services
             return _mapper.Map<List<DetalleCompraDTO>>(detalleCompras);
         }
 
-        public EDetalleCompra GetDetalleCompra(int id)
+        public DetalleCompraDTO GetDetalleCompra(int id)
         {
-            return _context.DetalleCompra
-                .Where(c => c.Id == id)
+            var detalleCompra = _context.DetalleCompra
+                .Where(c => c.Id == id).Include(x => x.Producto)
                  .FirstOrDefault();
+
+            return _mapper.Map<DetalleCompraDTO>(detalleCompra);
         }
 
     }

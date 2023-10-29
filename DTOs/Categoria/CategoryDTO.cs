@@ -8,6 +8,8 @@ namespace TpiBarberShop.DTOs.Categoria
         public string Nombre { get; set; } = string.Empty;
         public string? Descripcion { get; set; }
 
+        public DateTime FechaPublicado { get; set; }
+
 
         public List<SubCategoryFilterDTO> SubCategory { get; set; } = new List<SubCategoryFilterDTO>();
     }

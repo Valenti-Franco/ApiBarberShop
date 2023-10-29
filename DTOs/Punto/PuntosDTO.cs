@@ -1,4 +1,6 @@
-﻿namespace TpiBarberShop.DTOs.Punto
+﻿using TpiBarberShop.DTOs.Imagen;
+
+namespace TpiBarberShop.DTOs.Punto
 {
     public class PuntosDTO
     {
@@ -10,5 +12,9 @@
         public int ProductoId { get; set; }
 
         public int UsuarioId { get; set; }
+
+
+
+
     }
 }

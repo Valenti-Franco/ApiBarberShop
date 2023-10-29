@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using TpiBarberShop.DTOs;
+using System.Security;
 
 namespace TpiBarberShop.Entities
 {
@@ -34,9 +35,24 @@ namespace TpiBarberShop.Entities
 
 
 
+        public string?  VerificationToken { get; set; }
+
+        public DateTime? VerifiedAt { get; set; }
+
+        public string? PasswordResetToken { get; set; }  
+
+        public DateTime? ResetTokenExpires { get; set; } 
+
+
+
+
+
+
+
         public EUsuarios(string nombre)
         {
             Nombre = nombre;
+            Role = "Cliente";
             FechaPublicado = DateTime.Now;
 
         }

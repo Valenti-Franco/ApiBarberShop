@@ -18,8 +18,16 @@ namespace TpiBarberShop.Entities
 
         public ICollection<EDetalleCompra> DetalleCompra { get; set; }
 
-      
+
         public string Estado { get; set; }
+
+        public string pagoId { get; set; }
+
+        public string clientePaypalId { get; set; }
+
+        public string valorPago { get; set; }
+
+        public DateTime fechaPago { get; set; }
 
         public DateTime FechaPublicado { get; private set; }
 

@@ -13,6 +13,8 @@ namespace TpiBarberShop.AutoMapper
             CreateMap<OrdenCompraDTO, Entities.EOrdenCompra>();
 
             CreateMap<Entities.EDetalleCompra, DetalleCompraDTO>();
+            CreateMap<DetalleCompraDTO, Entities.EDetalleCompra>();
+
 
 
 

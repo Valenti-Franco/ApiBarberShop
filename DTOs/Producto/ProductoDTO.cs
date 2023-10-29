@@ -18,7 +18,9 @@ namespace TpiBarberShop.DTOs.Producto
         public int Stock { get; set; }
 
 
+        public DateTime FechaPublicado { get; set; }
 
+        public IList<ImagesProductoDTO> Imagenes { get; set; }
 
 
         public int CantidadDePuntos

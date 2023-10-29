@@ -15,14 +15,22 @@ namespace TpiBarberShop.Services
             _context = context;
             _mapper = mapper;
         }
+      
+        public EImagenProducto GetImagesProductoId(int id)
+        {
+            var imageProducto = _context.ImagenProductos
+               .FirstOrDefault(x => x.Id == id);
+
+            return imageProducto;
+        }
 
         public IEnumerable<ImagesProductoDTO> GetImagesProducto(int id)
         {
             var imageProducto = _context.ImagenProductos
-                
+
                 .Where(x => x.ProductoId == id)
                 .ToList();
-           
+
 
             return _mapper.Map<List<ImagesProductoDTO>>(imageProducto);
         }
@@ -75,7 +83,12 @@ namespace TpiBarberShop.Services
         {
             _context.ImagenUsuarios.Remove(imagen);
         }
-       
+        public void EliminarImagesProducto(EImagenProducto imagen)
+        {
+            _context.ImagenProductos.Remove(imagen);
+        }
+
+
         public void ActualizarImagenUsuario(EImagenUsuario imagen)
         {
             _context.ImagenUsuarios.Update(imagen);

@@ -21,6 +21,8 @@ namespace TpiBarberShop.DTOs.Compra
 
         public string valorPago { get; set; }
 
+        public DateTime FechaPublicado { get; set; }
+
         public DateTime fechaPago { get; set; }
 
         public int Total

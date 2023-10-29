@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TpiBarberShop.DTOs.OrdenCompra;
+using TpiBarberShop.Entities;
 using TpiBarberShop.Services;
 
 namespace TpiBarberShop.Controllers
@@ -25,8 +26,17 @@ namespace TpiBarberShop.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+
         public IActionResult GetOrdenCompraUser()
         {
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+
+            if (usuarioActual.Role != "Admin")
+            {
+               return NotFound("No tenes los permisos para ver este usuario");
+            }
             var ordenCompra = _OrdenCompraRepository.GetOrdenCompra();
             return Ok(ordenCompra);
 
@@ -34,18 +44,38 @@ namespace TpiBarberShop.Controllers
         }
 
         [HttpGet("{id}")]
-
+        [Authorize]
         public IActionResult GetOrdenCompra(int id)
         {
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+
+            
             var ordenCompra = _OrdenCompraRepository.GetOrdenCompra(id);
+
+            if (usuarioActual.Role != "Admin")
+            {
+                if (usuarioActual.Id != ordenCompra.UsuarioId)
+                    return NotFound("No tenes los permisos para ver este usuario");
+            }
 
             return Ok(_mapper.Map<OrdenCompraDTO>(ordenCompra));
 
         }
 
         [HttpGet("usuario/{idUsuario}")]
+        [Authorize]
+
         public IActionResult GetOrdenCompraUser(int idUsuario)
         {
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+            if (usuarioActual.Role != "Admin" )
+            {
+                if (usuarioActual.Id != idUsuario)
+                    return NotFound("No tenes los permisos para ver este usuario");
+            }
+
             var ordenCompra = _OrdenCompraRepository.GetOrdenCompraUser(idUsuario);
             return Ok(ordenCompra);
 
@@ -53,14 +83,16 @@ namespace TpiBarberShop.Controllers
         }
 
         [HttpPut("{id}/ConfirmarOrdenCompra/Admin")]
+        [Authorize]
 
         public ActionResult ConfirmarOrdenCompra(int id)
         {
 
-            //var usuarioId = User.FindFirstValue("sub");
-            //var usuarioActual = ObtenerUsuarioActual(usuarioId);
-            //if (usuarioActual.Role != "Admin")
-            //    return NotFound("No tenes los permisos actualizar Compra");
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+
+            if (usuarioActual.Role != "Admin")
+                return NotFound("No tenes los permisos actualizar Compra");
 
             var ordencompra = _OrdenCompraRepository.GetOrdenCompra(id);
 
@@ -84,6 +116,7 @@ namespace TpiBarberShop.Controllers
         [Authorize]
         public ActionResult EliminarOrdenCompraPendiente(int idOrdenCompra)
         {
+
             var compraAEliminar = _OrdenCompraRepository.GetOrdenCompra(idOrdenCompra);
 
 
@@ -94,13 +127,13 @@ namespace TpiBarberShop.Controllers
             if (compraAEliminar.Estado != "pendiente")
                 return NotFound(compraAEliminar);
 
-            //var usuarioId = User.FindFirstValue("sub");
-            //var usuarioActual = ObtenerUsuarioActual(usuarioId);
-            //if (usuarioActual.Role != "Admin")
-            //{
-            //    if (usuarioActual.Id != compraAEliminar.UsuarioId)
-            //        return NotFound("No tenes los permisos para eliminar esta Compra");
-            //}
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+            if (usuarioActual.Role != "Admin")
+            {
+                if (usuarioActual.Id != compraAEliminar.UsuarioId)
+                    return NotFound("No tenes los permisos para eliminar esta Compra");
+            }
             var detalleCompra = compraAEliminar.DetalleCompra;
 
             foreach (var detalle in detalleCompra)
@@ -132,18 +165,29 @@ namespace TpiBarberShop.Controllers
         }
 
         [HttpPost("{idUsuario}")]
-      
+        [Authorize]
         public ActionResult CrearOrdenCompra(int idUsuario)
         {
-
-            _OrdenCompraRepository.CrearOrdenCompra(idUsuario);
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+            if (usuarioActual.Role != "Admin" && usuarioActual.Role != "Editor")
+            {
+                if (usuarioActual.Id != idUsuario)
+                    return NotFound("No tenes los permisos para ver este usuario");
+            }
+            var ordenCompra = _OrdenCompraRepository.CrearOrdenCompra(usuarioActual.Id);
             _repository.GuardarCambios();
              
-            return Ok("Orden de Compra Creada Correctamente");
+            return Ok(_mapper.Map<OrdenCompraDTO>(ordenCompra));
 
             
         }
 
+        private EUsuarios ObtenerUsuarioActual(string usuarioId)
+        {
+            var usuario = _repository.GetUsuarios(int.Parse(usuarioId));
 
+            return usuario;
+        }
     }
 }

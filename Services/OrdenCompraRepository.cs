@@ -16,15 +16,20 @@ namespace TpiBarberShop.Services
             _mapper = mapper;
         }
 
-        public void CrearOrdenCompra(int usuarioId)
+        public EOrdenCompra CrearOrdenCompra(int usuarioId)
         {
             var nuevaOrdenCompra = new EOrdenCompra
             {
                 UsuarioId = usuarioId,
-                Estado = "pendiente"
+                Estado = "pendiente",
+                pagoId = "null",
+                clientePaypalId = "null",
+                valorPago = "null",
+                fechaPago = DateTime.MinValue,
             };
 
             _context.OrdenCompras.Add(nuevaOrdenCompra);
+            return (nuevaOrdenCompra);
         }
 
         public void EliminarOrdenCompra(EOrdenCompra ordencompra)
@@ -57,7 +62,8 @@ namespace TpiBarberShop.Services
         {
             var ordenCompras = _context.OrdenCompras
                .Include(c => c.DetalleCompra)
-               .Where(c => c.UsuarioId == idUsuario)
+               .ThenInclude(dc => dc.Producto)
+               .Where(u => u.UsuarioId == idUsuario)
                 .ToList();
             return _mapper.Map<List<OrdenCompraDTO>>(ordenCompras);
         }

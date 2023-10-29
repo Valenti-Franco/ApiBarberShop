@@ -44,8 +44,8 @@ namespace TpiBarberShop.Controllers
                 {
                     _repository.ReducirStock(producto, Cantidad);
                     _ComprasRepository.CrearNuevaCompra(usuarioActual.Id, producto.Id, Cantidad);
-                    _ComprasRepository.GuardarCambios();
-                  
+                    _repository.GuardarCambios();
+
 
                 }
                 catch (Exception ex)
@@ -59,9 +59,25 @@ namespace TpiBarberShop.Controllers
             string mensajeError = "El Producto actual no se pudo encontrar.";
             return NotFound(mensajeError);
         }
+        [HttpGet("usuario/{idUsuario}")]
+        [Authorize]
+        public IActionResult GetOrdenCompraUser(int idUsuario)
+        {
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+            if (usuarioActual.Role != "Admin")
+            {
+                if (usuarioActual.Id != idUsuario)
+                    return NotFound("No tenes los permisos para ver esta compra");
+            }
 
+            var Compra = _ComprasRepository.GetCompraUser(idUsuario);
+            return Ok(Compra);
+
+
+        }
         [HttpGet("Admin")]
-        //[Authorize]
+        [Authorize]
         public IActionResult ObtenerCompras()
         {
             var usuarioId = User.FindFirstValue("sub");

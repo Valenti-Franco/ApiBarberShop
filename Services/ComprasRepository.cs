@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TpiBarberShop.DBContexts;
 using TpiBarberShop.DTOs.Compra;
+using TpiBarberShop.DTOs.OrdenCompra;
 using TpiBarberShop.Entities;
 
 namespace TpiBarberShop.Services
@@ -65,11 +66,28 @@ namespace TpiBarberShop.Services
                 UsuarioId = usuarioId,
                 ProductoId = productoId,
                 Cantidad = Cantidad,
-                Estado = "pendiente"
+                Estado = "pendiente",
+                pagoId = "null",
+                clientePaypalId = "null",
+                valorPago = "null",
+                fechaPago = DateTime.MinValue,
+
             };
 
             _context.Compras.Add(nuevaCompra);
         }
+
+        public IEnumerable<CompraDTO> GetCompraUser(int idUsuario)
+        {
+            var Compras = _context.Compras.
+                Include(c => c.Producto)
+                .ThenInclude(p => p.Imagenes)
+                .Where(c => c.UsuarioId == idUsuario)
+
+                .ToList();
+            return _mapper.Map<List<CompraDTO>>(Compras);
+        }
+
         public void EliminarCompra(ECompras compra)
         {
             _context.Compras.Remove(compra);

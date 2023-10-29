@@ -2,6 +2,7 @@
 using AutoMapper.Internal;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Buffers.Text;
 using System.Runtime.Intrinsics.X86;
@@ -20,10 +21,11 @@ namespace TpiBarberShop.Controllers
     {
         private readonly IImagesRepository _ImagesRepository;
         private readonly IMapper _mapper;
+        private readonly IProductosRepository _repository;
 
-        public ImagesController(IImagesRepository ImagesRepository, IMapper mapper)
+        public ImagesController(IImagesRepository ImagesRepository, IProductosRepository repository, IMapper mapper)
         {
-
+            _repository  = repository;
             _ImagesRepository = ImagesRepository;
             _mapper = mapper;
         }
@@ -68,15 +70,19 @@ namespace TpiBarberShop.Controllers
 
         }
         [HttpPost("Usuario")]
+        [Authorize]
         public async Task<IActionResult> CrearImagen(ImageUsuarioCrearDTO imagenCrear)
         {
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+
             if (!ValidarTamanioBase64(imagenCrear.Base64))
             {
                 return BadRequest("El tamaño del archivo Base64 excede el límite de 1 MB.");
             }
 
             // Verificar si ya existe una imagen para el usuario con el mismo id
-            var imagenExistente = _ImagesRepository.GetImageUsuario(imagenCrear.UsuarioId);
+            var imagenExistente = _ImagesRepository.GetImageUsuario(usuarioActual.Id);
 
             if (imagenExistente != null)
             {
@@ -92,6 +98,7 @@ namespace TpiBarberShop.Controllers
             {
                 // Si no existe, crear una nueva imagen
                 EImagenUsuario imagenNueva = _mapper.Map<EImagenUsuario>(imagenCrear);
+                imagenNueva.UsuarioId = usuarioActual.Id;
                 imagenNueva.URL = await Upload(imagenCrear.Base64);
                 _ImagesRepository.AgregarImagenUsuario(imagenNueva);
                 _ImagesRepository.GuardarCambios();
@@ -101,9 +108,21 @@ namespace TpiBarberShop.Controllers
             }
         }
 
-        [HttpPost("Producto")]
+        [HttpPost("Producto/Admin")]
+        [Authorize]
+
         public async Task<IActionResult> CrearImagenProducto(ImageProductoCrearDTO imagenCrear)
         {
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+
+            if (usuarioActual.Role != "Admin" && usuarioActual.Role != "Editor")
+
+            {
+
+                return NotFound("No tenes los permisos para crear una imagen Producto");
+
+            }
             if (!ValidarTamanioBase64(imagenCrear.Base64))
             {
                 return BadRequest("El tamaño del archivo Base64 excede el límite de 1 MB.");
@@ -116,19 +135,56 @@ namespace TpiBarberShop.Controllers
 
                 var imagesProductoDTO = _mapper.Map<ImagesProductoDTO>(imagenNueva);
                 return Ok(imagesProductoDTO);
-            
+
         }
 
-        [HttpDelete("{idUsuario}")]
+        [HttpDelete("Usuario/{idUsuario}")]
+        [Authorize]
         public ActionResult EliminarImagen(int idUsuario)
         {
 
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
 
+            if (usuarioActual.Role != "Admin" && usuarioActual.Role != "Editor")
+
+            {
+                if (usuarioActual.Id != idUsuario)
+                    return NotFound("No tenes los permisos para ver este usuario");
+
+            }
             var imagenAEliminar = _ImagesRepository.GetImageUsuario(idUsuario);
             if (imagenAEliminar is null)
                 return NotFound();
 
             _ImagesRepository.EliminarImagesUsuario(imagenAEliminar);
+            _ImagesRepository.GuardarCambios();
+
+            return NoContent();
+
+        }
+
+        [HttpDelete("Producto/{idProductoImagen}")]
+        [Authorize]
+
+        public ActionResult EliminarProducto(int idProductoImagen)
+        {
+
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+
+            if (usuarioActual.Role != "Admin" && usuarioActual.Role != "Editor")
+
+            {
+                    return NotFound("No tenes los permisos para eliminar esta imagen");
+
+            }
+            var imagenAEliminar = _ImagesRepository.GetImagesProductoId(idProductoImagen);
+            
+            if (imagenAEliminar is null)
+                return NotFound();
+
+            _ImagesRepository.EliminarImagesProducto(imagenAEliminar);
             _ImagesRepository.GuardarCambios();
 
             return NoContent();
@@ -167,11 +223,16 @@ namespace TpiBarberShop.Controllers
                 return false;
             }
         }
-  
 
 
 
 
+        private EUsuarios ObtenerUsuarioActual(string usuarioId)
+        {
+            var usuario = _repository.GetUsuarios(int.Parse(usuarioId));
+
+            return usuario;
+        }
 
 
     }

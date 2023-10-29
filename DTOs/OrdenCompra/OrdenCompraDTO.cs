@@ -15,6 +15,16 @@ namespace TpiBarberShop.DTOs.OrdenCompra
 
         public string Estado { get; set; }
 
+        public string pagoId { get; set; }
+
+        public string clientePaypalId { get; set; }
+
+        public string valorPago { get; set; }
+
+        public DateTime FechaPublicado { get; set; }
+
+        public DateTime fechaPago { get; set; }
+
         public int Total
         {
             get

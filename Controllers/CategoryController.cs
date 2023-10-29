@@ -14,10 +14,12 @@ namespace TpiBarberShop.Controllers
     {
 
         private readonly ICategoryRepository _CategoryRepository;
+        private readonly IUsuariosRepository _repository;
 
         private readonly IMapper _mapper;
-        public CategoryController(ICategoryRepository CategoryRepository, IMapper mapper)
+        public CategoryController(ICategoryRepository CategoryRepository, IUsuariosRepository repository, IMapper mapper)
         {
+            _repository = repository;
             _CategoryRepository = CategoryRepository;
             _mapper = mapper;
         }
@@ -46,11 +48,19 @@ namespace TpiBarberShop.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
 
         public IActionResult ActualizarCategory(int id, [FromBody] CategoryActualizarDTO categoryActualizada)
         {
 
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
 
+            if (usuarioActual.Role != "Admin" && usuarioActual.Role != "Editor")
+
+            {
+                return NotFound("No tenes los permisos para editar Categorias");
+            }
             var categoryAActualizar = _CategoryRepository.GetCategory(id);
 
             if (categoryAActualizar == null)
@@ -64,11 +74,18 @@ namespace TpiBarberShop.Controllers
             return Ok("Categoria editado correctamente");
         }
 
-        [HttpPost]
-        
+        [HttpPost("Admin")]
+        [Authorize]
         public ActionResult<CategoryDTO> CreacionPunto(CategoryActualizarDTO categoryACrear)
         {
-           
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+
+            if (usuarioActual.Role != "Admin" && usuarioActual.Role != "Editor")
+
+            {
+                return NotFound("No tenes los permisos para agregar Categorias");
+            }
 
             ECategory CategoryNuevo = _mapper.Map<ECategory>(categoryACrear);
 
@@ -81,11 +98,18 @@ namespace TpiBarberShop.Controllers
 
 
         [HttpDelete("{idCategory}/Admin")]
-      
+        [Authorize]
+
         public ActionResult EliminarProductoAdmin(int idCategory)
         {
 
-          
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+
+            if (usuarioActual.Role != "Admin")
+            {
+                return NotFound("No tenes los permisos para eliminar Categorias");
+            }
             var categoryAEliminar = _CategoryRepository.GetCategory(idCategory);
             if (categoryAEliminar is null)
                 return NotFound("No se encontro la categoria");
@@ -95,6 +119,13 @@ namespace TpiBarberShop.Controllers
 
             return NoContent();
 
+        }
+
+        private EUsuarios ObtenerUsuarioActual(string usuarioId)
+        {
+            var usuario = _repository.GetUsuarios(int.Parse(usuarioId));
+
+            return usuario;
         }
 
     }

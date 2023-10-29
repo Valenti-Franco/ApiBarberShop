@@ -15,5 +15,8 @@
 
         public string fechaPago { get; set; }
 
+        public DateTime FechaPublicado { get; set; }
+
+
     }
 }

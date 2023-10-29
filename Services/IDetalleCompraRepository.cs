@@ -7,10 +7,9 @@ namespace TpiBarberShop.Services
     {
         public IEnumerable<DetalleCompraDTO> GetDetalleCompra();
 
-        public EDetalleCompra GetDetalleCompra(int id);
+        public DetalleCompraDTO GetDetalleCompra(int id);
 
         void CreaDetalleCompra(int ordencompraId, int productoId, int cantidad);
-
-
+        
     }
 }

@@ -51,9 +51,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<UsuariosData>();
 
 //builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:InfoCiudadesDBConnectionString"]));
-//builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite("Filename=./BarberShop.db"));
+builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite("Filename=./BarberShop.db"));
 
-builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:BarberDBConnectionString"]));
+//builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:BarberDBConnectionString"]));
 //builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlServer(builder.Configuration["ConnectionStrings:BarberDBConnectionString"]));
 
 //buide.services.Configure<MercadoPagoOptions>(Configuration.GetSection("MercadoPago"));
@@ -100,8 +100,8 @@ if (app.Environment.IsDevelopment())
 
     {
         app.UseSwagger();
-    app.UseSwaggerUI();
-}
+        app.UseSwaggerUI();
+    }
 
 app.UseCors(builder =>
 {
@@ -111,6 +111,9 @@ app.UseCors(builder =>
 });
 
 app.UseHttpsRedirection();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 

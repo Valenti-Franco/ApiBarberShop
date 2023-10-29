@@ -14,6 +14,8 @@ namespace TpiBarberShop.DTOs.SubCategoria
 
         public int CategoryId { get; set; }
 
+        public DateTime FechaPublicado { get; set; }
+
 
     }
 }

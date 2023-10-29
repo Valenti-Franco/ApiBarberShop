@@ -19,6 +19,8 @@ namespace TpiBarberShop.DTOs.Usuario
 
         public ImagesUsuarioDTO Imagen { get; set; }
 
+        public DateTime FechaPublicado { get; set; }
+
 
 
     }

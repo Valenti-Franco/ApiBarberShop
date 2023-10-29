@@ -8,5 +8,9 @@
         public string Nombre { get; set; } = string.Empty;
 
         public int UsuarioId { get; set; }
+        public DateTime FechaPublicado { get; set; }
+
+
+
     }
 }

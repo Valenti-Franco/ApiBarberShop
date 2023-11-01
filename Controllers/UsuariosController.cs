@@ -3,12 +3,16 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using TpiBarberShop.DTOs;
 using TpiBarberShop.Entities;
 using TpiBarberShop.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using TpiBarberShop.DTOs.Usuario;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Identity;
+using MercadoPago.Resource.User;
+
 
 namespace TpiBarberShop.Controllers
 {
@@ -44,7 +48,7 @@ namespace TpiBarberShop.Controllers
 
             if (usuarioActual.Role != "Admin")
             {
-                    return NotFound("No tenes los permisos para ver los usuarios");
+                return NotFound("No tenes los permisos para ver los usuarios");
             }
             var usuarios = _repository.GetUsuarios();
             var usuariosDTO = _mapper.Map<List<UsuariosDTO>>(usuarios);
@@ -72,17 +76,32 @@ namespace TpiBarberShop.Controllers
 
           
 
-            var compras = _ComprasRepository.GetComprasByUsuarioId(id);
-            var comprasDTO = _mapper.Map<List<CompraSinUserDTO>>(compras);
-            if (comprasDTO.Count > 0)
-            {
-                usuario.Compras = comprasDTO;
+            //var compras = _ComprasRepository.GetComprasByUsuarioId(id);
+            //var comprasDTO = _mapper.Map<ICollection<CompraSinUserDTO>>(compras);
+            //if (comprasDTO.Count > 0)
+            //{
+            //    usuario.Compras = comprasDTO;
                 
-                return Ok(usuario);
-            }
+            //    return Ok(usuario);
+            //}
 
             return Ok(_mapper.Map<UsuariosDTO>(usuario));
         }
+
+        [HttpGet("ObtenerUsuario")]
+        [Authorize]
+        public IActionResult GetUsuariosToken()
+        {
+
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+
+         
+            return Ok(_mapper.Map<UsuariosDTO>(usuarioActual));
+           
+        }
+
+
         [HttpPost("authenticate")] //Vamos a usar un POST ya que debemos enviar los datos para hacer el login
         public ActionResult<string> Autenticar(UsuariosLoginDTO usuario) //Enviamos como parámetro la clase que creamos arriba
         {
@@ -91,6 +110,11 @@ namespace TpiBarberShop.Controllers
 
             if (user is null) //Si el la función de arriba no devuelve nada es porque los datos son incorrectos, por lo que devolvemos un Unauthorized (un status code 401).
                 return Unauthorized("Usuario o Contraseña incorrectas");
+
+            if( user.VerifiedAt == DateTime.MinValue.ToUniversalTime())
+            {
+                return BadRequest("No Verificado!");
+            }
 
             var securityPassword = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_config["Authentication:SecretForKey"])); //Traemos la SecretKey del Json. agregar antes: using Microsoft.IdentityModel.Tokens;
 
@@ -108,7 +132,7 @@ namespace TpiBarberShop.Controllers
               _config["Authentication:Audience"],
               claimsForToken,
               DateTime.UtcNow,
-              DateTime.UtcNow.AddHours(1),
+              DateTime.UtcNow.AddHours(3),
               credentials);
 
             var tokenToReturn = new JwtSecurityTokenHandler() //Pasamos el token a string
@@ -120,16 +144,76 @@ namespace TpiBarberShop.Controllers
         {
             return _repository.ValidateUser(authParams);
         }
-        [HttpPost("Admin")]
-        [Authorize]
+        [HttpPost("VerificarEmail")]
+        public async Task<IActionResult> Verify(string token)
+        {
+            var user = _repository.ValidateToken(token);
+            if (user == null)
+            {
+                return BadRequest("Token Invalido");
+
+            }
+            user.VerifiedAt = DateTime.Now;
+            _repository.GuardarCambios();
+
+            return Ok("Usuario Verificado");
+
+        }
+        [HttpPost("OlvidoContrasena")]
+        public async Task<IActionResult> forgot(string email)
+        {
+            var user = _repository.ForgotPassword(email);
+            if (user == null)
+            {
+                return BadRequest("Email Invalido");
+
+            }
+            user.PasswordResetToken = CreateRandomToken();
+            user.ResetTokenExpires = DateTime.Now.AddDays(1);
+
+            _repository.GuardarCambios();
+
+            bool enviado = _repository.EnviarEmail(user.Email, user.PasswordResetToken);
+
+            if (enviado)
+            {
+                return Ok("Se ha enviado un mensaje de correo electrónico con el token de reinicio");
+            }
+            else
+            {
+                return BadRequest("No se pudo enviar el correo electrónico.");
+            }
+
+        }
+        
+
+        [HttpPost("ReestablecerContrasena")]
+        public async Task<IActionResult> reset(ResetPasswordDTO resetPass)
+        {
+            var user = _repository.ResetPass(resetPass.Token);
+            if (user == null || user.ResetTokenExpires < DateTime.Now)
+            {
+                return BadRequest("Token Invalido");
+
+            }
+            string contraseñaHasheada = BCrypt.Net.BCrypt.HashPassword(resetPass.Password);
+            user.Password = contraseñaHasheada;
+            _repository.GuardarCambios();
+
+            return Ok("Contraseña Reestablecida Correctamente");
+
+        }
+
+        [HttpPost("Register")]
+        //[Authorize]
         public ActionResult<UsuariosDTO> CreacionUsuario(UsuarioCreacionDTO usuarioACrear)
         {
-            var usuarioId = User.FindFirstValue("sub");
-            var usuarioActual = ObtenerUsuarioActual(usuarioId);
-            if (usuarioActual.Role != "Admin")
-            {
-                return NotFound("No tenes los permisos para craer un usuario");
-            }
+            //var usuarioId = User.FindFirstValue("sub");
+            //var usuarioActual = ObtenerUsuarioActual(usuarioId);
+            //if (usuarioActual.Role != "Admin")
+            //{
+            //    return NotFound("No tenes los permisos para craer un usuario");
+            //}
             if (_repository.ExisteNombreUsuario(usuarioACrear.Nombre))
             {
                 return BadRequest("El nombre de usuario ya existe.");
@@ -140,20 +224,48 @@ namespace TpiBarberShop.Controllers
             {
                 return BadRequest("El correo electrónico ya existe.");
             }
-
+            
+            string contraseñaHasheada = BCrypt.Net.BCrypt.HashPassword(usuarioACrear.Password);
             EUsuarios UsuarioNuevo = _mapper.Map<EUsuarios>(usuarioACrear);
+
+            UsuarioNuevo.Password = contraseñaHasheada;
+      
+            UsuarioNuevo.VerificationToken = CreateRandomToken();
+            UsuarioNuevo.PasswordResetToken = "NULL";
+            UsuarioNuevo.ResetTokenExpires = DateTime.MinValue.ToUniversalTime();
+            UsuarioNuevo.VerifiedAt = DateTime.MinValue.ToUniversalTime();
+
+
 
             _repository.AgregarUsuario(UsuarioNuevo);
             _repository.GuardarCambios();
+            bool enviado = _repository.EnviarEmailVerificacion(UsuarioNuevo.Email, UsuarioNuevo.VerificationToken);
 
-            return Ok();
+            if (enviado)
+            {
+                return Ok("Se ha enviado un mensaje de correo electrónico con el token de verificacin");
+            }
+            else
+            {
+                return BadRequest("No se pudo enviar el correo electrónico.");
+            }
+            return NoContent();
         }
 
-    
+       
+        private string CreateRandomToken()
+        {
+            byte[] tokenBytes = new byte[32]; // 16 bytes para un token de 32 caracteres
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(tokenBytes);
+            }
+            return BitConverter.ToString(tokenBytes).Replace("-", "").ToLower();
+        }
 
-        [HttpPut("{id}")]
+        [HttpPut("CrearEditor/{id}")]
         [Authorize]
-        public IActionResult EditarNombreUsuarioAdmin(int id, [FromBody] EditarNombreUsuarioDTO nombreUsuarioDto)
+        public IActionResult CrearEditor(int id)
         {
             var usuario = _repository.GetUsuarios(id);
             if (usuario is null)
@@ -165,17 +277,43 @@ namespace TpiBarberShop.Controllers
             var usuarioActual = ObtenerUsuarioActual(usuarioId);
             if (usuarioActual.Role != "Admin")
             {
-                if (usuarioActual.Id != id)
-                    return NotFound("No tenes los permisos para editar este usuario");
+               
+               return NotFound("No tenes los permisos para editar este usuario");
 
             }
 
            
 
-            usuario.Nombre = nombreUsuarioDto.Nombre;
+            usuario.Role = "Editor";
             _repository.GuardarCambios();
 
-            return Ok("Nombre editado correctamente");
+            return Ok("Rol editado correctamente");
+        }
+        [HttpPut("CrearAdmin/{id}")]
+        [Authorize]
+        public IActionResult CrearAdmin(int id)
+        {
+            var usuario = _repository.GetUsuarios(id);
+            if (usuario is null)
+            {
+                return NotFound("El usuario no existe");
+            }
+
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+            if (usuarioActual.Role != "Admin")
+            {
+
+                return NotFound("No tenes los permisos para editar este usuario");
+
+            }
+
+
+
+            usuario.Role = "Admin";
+            _repository.GuardarCambios();
+
+            return Ok("Rol editado correctamente");
         }
 
         private EUsuarios ObtenerUsuarioActual(string usuarioId)

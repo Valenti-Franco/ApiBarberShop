@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TpiBarberShop.DBContexts;
-using TpiBarberShop.DTOs;
+using TpiBarberShop.DTOs.Compra;
+using TpiBarberShop.DTOs.OrdenCompra;
 using TpiBarberShop.Entities;
 
 namespace TpiBarberShop.Services
@@ -18,18 +19,18 @@ namespace TpiBarberShop.Services
         }
 
 
-    public IEnumerable<CompraDTO> GetCompras()
+    public IEnumerable<ECompras> GetCompras()
 {
-    var compras = _context.Compras
-        //.Include(c => c.Usuario)
-        .Include(c => c.Producto)
-        .OrderBy(x => x.Id)
-        .ToList();
+            return _context.Compras
+                //.Include(c => c.Usuario)
+                .Include(c => c.Producto).ToList();
+        //.OrderBy(x => x.Id)
 
-    var comprasDto = _mapper.Map<List<CompraDTO>>(compras);
 
-    return comprasDto;
-}
+            //var comprasDto = _mapper.Map<List<CompraDTO>>(compras);
+
+            //return comprasDto;
+        }
 
         public ECompras GetCompras(int comprasId)
         {
@@ -58,17 +59,35 @@ namespace TpiBarberShop.Services
                 .ToList();
         }
 
-        public void CrearNuevaCompra(int usuarioId, int productoId)
+        public void CrearNuevaCompra(int usuarioId, int productoId, int Cantidad)
         {
             var nuevaCompra = new ECompras
             {
                 UsuarioId = usuarioId,
                 ProductoId = productoId,
-                Estado = "pendiente"
+                Cantidad = Cantidad,
+                Estado = "pendiente",
+                pagoId = "null",
+                clientePaypalId = "null",
+                valorPago = "null",
+                fechaPago = DateTime.MinValue,
+
             };
 
             _context.Compras.Add(nuevaCompra);
         }
+
+        public IEnumerable<CompraDTO> GetCompraUser(int idUsuario)
+        {
+            var Compras = _context.Compras.
+                Include(c => c.Producto)
+                .ThenInclude(p => p.Imagenes)
+                .Where(c => c.UsuarioId == idUsuario)
+
+                .ToList();
+            return _mapper.Map<List<CompraDTO>>(Compras);
+        }
+
         public void EliminarCompra(ECompras compra)
         {
             _context.Compras.Remove(compra);

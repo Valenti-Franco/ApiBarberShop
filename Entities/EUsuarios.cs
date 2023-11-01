@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using TpiBarberShop.DTOs;
+using System.Security;
 
 namespace TpiBarberShop.Entities
 {
@@ -20,17 +21,40 @@ namespace TpiBarberShop.Entities
         [Required]
         [MaxLength(150)]
 
-        public string Email { get; set; } 
+        public string Email { get; set; }
 
         [Required]
         public string Role { get; set; }
+        public EImagenUsuario Imagen { get; set; }
+        public ICollection<ECompras> Compras { get; set; }
+        public ICollection<EOrdenCompra> OrdenCompra { get; set; }
 
-        public List<CompraSinUserDTO> Compras { get; set; } = new List<CompraSinUserDTO>();
+
+        public DateTime FechaPublicado { get; private set; }
+
+
+
+
+        public string?  VerificationToken { get; set; }
+
+        public DateTime? VerifiedAt { get; set; }
+
+        public string? PasswordResetToken { get; set; }  
+
+        public DateTime? ResetTokenExpires { get; set; } 
+
+
+
+
+
 
 
         public EUsuarios(string nombre)
         {
             Nombre = nombre;
+            Role = "Cliente";
+            FechaPublicado = DateTime.Now;
+
         }
     }
 }

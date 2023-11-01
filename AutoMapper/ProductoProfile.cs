@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TpiBarberShop.DTOs.Producto;
 
 namespace TpiBarberShop.AutoMapper
 {
@@ -6,10 +7,14 @@ namespace TpiBarberShop.AutoMapper
     {
         public ProductoProfile()
         {
-            CreateMap<Entities.EProducto, DTOs.ProductoSinPuntoDTO>();
-            CreateMap<Entities.EProducto, DTOs.ProductoDTO>();
-            CreateMap<DTOs.ProductoCreacionDTO, Entities.EProducto>();
-            CreateMap<DTOs.ProductoActualizarDTO, Entities.EProducto>();
+            CreateMap<Entities.EProducto, ProductoSinPuntoDTO>();
+            CreateMap<Entities.EProducto, ProductoPrecioDTO>();
+
+            CreateMap<Entities.EProducto, ProductoDTO>();
+           
+
+            CreateMap<ProductoCreacionDTO, Entities.EProducto>();
+            CreateMap<ProductoActualizarDTO, Entities.EProducto>();
 
 
         }

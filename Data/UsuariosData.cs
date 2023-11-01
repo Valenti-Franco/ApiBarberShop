@@ -1,5 +1,4 @@
-﻿using TpiBarberShop.DTOs;
-
+﻿using TpiBarberShop.DTOs.Usuario;
 
 namespace TpiBarberShop.Data
 {

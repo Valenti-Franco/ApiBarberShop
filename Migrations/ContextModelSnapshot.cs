@@ -17,16 +17,58 @@ namespace TpiBarberShop.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.8");
 
-            modelBuilder.Entity("TpiBarberShop.DTOs.CompraSinUserDTO", b =>
+            modelBuilder.Entity("TpiBarberShop.Entities.ECategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("EUsuariosId")
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("FechaPublicado")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Descripcion = "es una tijera",
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(883),
+                            Nombre = "Tijera"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Descripcion = "maquinita good",
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(885),
+                            Nombre = "Maquinita"
+                        });
+                });
+
+            modelBuilder.Entity("TpiBarberShop.Entities.ECompras", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Cantidad")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("FechaPublicado")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ProductoId")
@@ -35,14 +77,161 @@ namespace TpiBarberShop.Migrations
                     b.Property<int>("UsuarioId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("clientePaypalId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("fechaPago")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("pagoId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("valorPago")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("EUsuariosId");
+                    b.HasIndex("ProductoId");
 
-                    b.ToTable("CompraSinUserDTO");
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Compras");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Cantidad = 2,
+                            Estado = "pendiente",
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(866),
+                            ProductoId = 1,
+                            UsuarioId = 1,
+                            clientePaypalId = "",
+                            fechaPago = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(868),
+                            pagoId = "",
+                            valorPago = ""
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Cantidad = 4,
+                            Estado = "confirmada",
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(869),
+                            ProductoId = 2,
+                            UsuarioId = 2,
+                            clientePaypalId = "132342f",
+                            fechaPago = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(870),
+                            pagoId = "123424223",
+                            valorPago = "100"
+                        });
                 });
 
-            modelBuilder.Entity("TpiBarberShop.Entities.ECompras", b =>
+            modelBuilder.Entity("TpiBarberShop.Entities.EDetalleCompra", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("FechaPublicado")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("OrdenCompraId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrdenCompraId");
+
+                    b.HasIndex("ProductoId");
+
+                    b.ToTable("DetalleCompra");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Cantidad = 3,
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(962),
+                            OrdenCompraId = 1,
+                            ProductoId = 1
+                        });
+                });
+
+            modelBuilder.Entity("TpiBarberShop.Entities.EImagenProducto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("FechaPublicado")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductoId");
+
+                    b.ToTable("ImagenProductos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(992),
+                            ProductoId = 1,
+                            URL = "www.produtoImagen"
+                        });
+                });
+
+            modelBuilder.Entity("TpiBarberShop.Entities.EImagenUsuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("FechaPublicado")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId")
+                        .IsUnique();
+
+                    b.ToTable("ImagenUsuarios");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(980),
+                            URL = "www.usuarioImagen",
+                            UsuarioId = 1
+                        });
+                });
+
+            modelBuilder.Entity("TpiBarberShop.Entities.EOrdenCompra", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,32 +241,55 @@ namespace TpiBarberShop.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ProductoId")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTime>("FechaPublicado")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("UsuarioId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("clientePaypalId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("fechaPago")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("pagoId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("valorPago")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductoId");
+                    b.HasIndex("UsuarioId");
 
-                    b.ToTable("Compras");
+                    b.ToTable("OrdenCompras");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             Estado = "pendiente",
-                            ProductoId = 1,
-                            UsuarioId = 1
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(911),
+                            UsuarioId = 1,
+                            clientePaypalId = "121",
+                            fechaPago = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(914),
+                            pagoId = "1",
+                            valorPago = "121"
                         },
                         new
                         {
                             Id = 2,
-                            Estado = "confirmada",
-                            ProductoId = 2,
-                            UsuarioId = 2
+                            Estado = "pendiente",
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(914),
+                            UsuarioId = 2,
+                            clientePaypalId = "1",
+                            fechaPago = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(916),
+                            pagoId = "12",
+                            valorPago = "233"
                         });
                 });
 
@@ -87,7 +299,13 @@ namespace TpiBarberShop.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Descripcion")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("FechaPublicado")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nombre")
@@ -101,7 +319,14 @@ namespace TpiBarberShop.Migrations
                     b.Property<int>("Stock")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("SubcategoryId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("SubcategoryId");
 
                     b.ToTable("Productos");
 
@@ -109,26 +334,35 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 1,
-                            Descripcion = "Navaja Filosa",
+                            CategoryId = 2,
+                            Descripcion = "Navaja",
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(637),
                             Nombre = "Navaja",
                             Precio = 5,
-                            Stock = 40
+                            Stock = 40,
+                            SubcategoryId = 1
                         },
                         new
                         {
                             Id = 2,
+                            CategoryId = 1,
                             Descripcion = "Gel de pelo",
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(647),
                             Nombre = "Gel",
                             Precio = 15,
-                            Stock = 100
+                            Stock = 100,
+                            SubcategoryId = 1
                         },
                         new
                         {
                             Id = 3,
+                            CategoryId = 1,
                             Descripcion = "Maquinita para cortar",
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(648),
                             Nombre = "Maquinita",
                             Precio = 80,
-                            Stock = 15
+                            Stock = 15,
+                            SubcategoryId = 1
                         });
                 });
 
@@ -137,6 +371,9 @@ namespace TpiBarberShop.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("FechaPublicado")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -162,6 +399,7 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 1,
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(822),
                             Nombre = "Pepito",
                             ProductoId = 1,
                             Puntos = 3,
@@ -170,6 +408,7 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 4,
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(824),
                             Nombre = "Robert",
                             ProductoId = 1,
                             Puntos = 3,
@@ -178,6 +417,7 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 5,
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(825),
                             Nombre = "Jesus",
                             ProductoId = 1,
                             Puntos = 3,
@@ -186,6 +426,7 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 2,
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(825),
                             Nombre = "Jorge",
                             ProductoId = 2,
                             Puntos = 1,
@@ -194,6 +435,7 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 6,
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(826),
                             Nombre = "Jorge123",
                             ProductoId = 2,
                             Puntos = 2,
@@ -202,6 +444,7 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 7,
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(827),
                             Nombre = "perro",
                             ProductoId = 2,
                             Puntos = 3,
@@ -210,10 +453,51 @@ namespace TpiBarberShop.Migrations
                         new
                         {
                             Id = 3,
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(828),
                             Nombre = "Juanchon",
                             ProductoId = 3,
                             Puntos = 5,
                             UsuarioId = 6
+                        });
+                });
+
+            modelBuilder.Entity("TpiBarberShop.Entities.ESubcategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("FechaPublicado")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("SubCategory");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 2,
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(899),
+                            Nombre = "Tijeras"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = 1,
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(901),
+                            Nombre = "Maquinita"
                         });
                 });
 
@@ -228,6 +512,9 @@ namespace TpiBarberShop.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("FechaPublicado")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -237,8 +524,20 @@ namespace TpiBarberShop.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("PasswordResetToken")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ResetTokenExpires")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Role")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VerificationToken")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("VerifiedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -250,44 +549,131 @@ namespace TpiBarberShop.Migrations
                         {
                             Id = 1,
                             Email = "jose@jose.com",
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(846),
                             Nombre = "Jose",
-                            Password = "123",
-                            Role = "Cliente"
+                            Password = "$2a$11$QBfVcDxBTsNMp/NMGTgAZexNBj/epkt5W1z/GNqP1Blk.d2KoExPm",
+                            PasswordResetToken = "adasd",
+                            ResetTokenExpires = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(849),
+                            Role = "Cliente",
+                            VerificationToken = "adsd",
+                            VerifiedAt = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(847)
                         },
                         new
                         {
                             Id = 2,
                             Email = "Franco@Franco.com",
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(850),
                             Nombre = "Franco",
-                            Password = "123",
-                            Role = "Admin"
+                            Password = "$2a$11$QBfVcDxBTsNMp/NMGTgAZexNBj/epkt5W1z/GNqP1Blk.d2KoExPm",
+                            PasswordResetToken = "adasd",
+                            ResetTokenExpires = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(852),
+                            Role = "Admin",
+                            VerificationToken = "adsd",
+                            VerifiedAt = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(851)
                         },
                         new
                         {
                             Id = 3,
                             Email = "Pepito@Pepito.com",
+                            FechaPublicado = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(852),
                             Nombre = "Pepito",
-                            Password = "123",
-                            Role = "Cliente"
+                            Password = "$2a$11$QBfVcDxBTsNMp/NMGTgAZexNBj/epkt5W1z/GNqP1Blk.d2KoExPm",
+                            PasswordResetToken = "adasd",
+                            ResetTokenExpires = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(854),
+                            Role = "Cliente",
+                            VerificationToken = "adsd",
+                            VerifiedAt = new DateTime(2023, 10, 20, 0, 47, 39, 937, DateTimeKind.Local).AddTicks(853)
                         });
-                });
-
-            modelBuilder.Entity("TpiBarberShop.DTOs.CompraSinUserDTO", b =>
-                {
-                    b.HasOne("TpiBarberShop.Entities.EUsuarios", null)
-                        .WithMany("Compras")
-                        .HasForeignKey("EUsuariosId");
                 });
 
             modelBuilder.Entity("TpiBarberShop.Entities.ECompras", b =>
                 {
                     b.HasOne("TpiBarberShop.Entities.EProducto", "Producto")
-                        .WithMany()
+                        .WithMany("Compras")
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TpiBarberShop.Entities.EUsuarios", "Usuario")
+                        .WithMany("Compras")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Producto");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("TpiBarberShop.Entities.EDetalleCompra", b =>
+                {
+                    b.HasOne("TpiBarberShop.Entities.EOrdenCompra", "OrdenCompra")
+                        .WithMany("DetalleCompra")
+                        .HasForeignKey("OrdenCompraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TpiBarberShop.Entities.EProducto", "Producto")
+                        .WithMany("DetalleCompra")
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrdenCompra");
+
+                    b.Navigation("Producto");
+                });
+
+            modelBuilder.Entity("TpiBarberShop.Entities.EImagenProducto", b =>
+                {
+                    b.HasOne("TpiBarberShop.Entities.EProducto", "Producto")
+                        .WithMany("Imagenes")
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Producto");
+                });
+
+            modelBuilder.Entity("TpiBarberShop.Entities.EImagenUsuario", b =>
+                {
+                    b.HasOne("TpiBarberShop.Entities.EUsuarios", "Usuario")
+                        .WithOne("Imagen")
+                        .HasForeignKey("TpiBarberShop.Entities.EImagenUsuario", "UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("TpiBarberShop.Entities.EOrdenCompra", b =>
+                {
+                    b.HasOne("TpiBarberShop.Entities.EUsuarios", "Usuario")
+                        .WithMany("OrdenCompra")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("TpiBarberShop.Entities.EProducto", b =>
+                {
+                    b.HasOne("TpiBarberShop.Entities.ECategory", "category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TpiBarberShop.Entities.ESubcategory", "Subcategory")
+                        .WithMany("Producto")
+                        .HasForeignKey("SubcategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subcategory");
+
+                    b.Navigation("category");
                 });
 
             modelBuilder.Entity("TpiBarberShop.Entities.EPuntos", b =>
@@ -301,14 +687,51 @@ namespace TpiBarberShop.Migrations
                     b.Navigation("Producto");
                 });
 
+            modelBuilder.Entity("TpiBarberShop.Entities.ESubcategory", b =>
+                {
+                    b.HasOne("TpiBarberShop.Entities.ECategory", "Category")
+                        .WithMany("SubCategory")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("TpiBarberShop.Entities.ECategory", b =>
+                {
+                    b.Navigation("SubCategory");
+                });
+
+            modelBuilder.Entity("TpiBarberShop.Entities.EOrdenCompra", b =>
+                {
+                    b.Navigation("DetalleCompra");
+                });
+
             modelBuilder.Entity("TpiBarberShop.Entities.EProducto", b =>
                 {
+                    b.Navigation("Compras");
+
+                    b.Navigation("DetalleCompra");
+
+                    b.Navigation("Imagenes");
+
                     b.Navigation("Puntos");
+                });
+
+            modelBuilder.Entity("TpiBarberShop.Entities.ESubcategory", b =>
+                {
+                    b.Navigation("Producto");
                 });
 
             modelBuilder.Entity("TpiBarberShop.Entities.EUsuarios", b =>
                 {
                     b.Navigation("Compras");
+
+                    b.Navigation("Imagen")
+                        .IsRequired();
+
+                    b.Navigation("OrdenCompra");
                 });
 #pragma warning restore 612, 618
         }

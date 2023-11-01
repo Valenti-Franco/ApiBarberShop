@@ -16,15 +16,21 @@ namespace TpiBarberShop.Entities
         [MaxLength(50)]
         public string Nombre { get; set; } = string.Empty;
 
+
         public int UsuarioId { get; set; }
 
         [ForeignKey("ProductoId")]
         public EProducto Producto { get; set; }
         public int ProductoId { get; set; }
 
+        public DateTime FechaPublicado { get; private set; }
+
+
         public EPuntos(int puntos)
         {
             Puntos = puntos;
+            FechaPublicado = DateTime.Now;
+
         }
 
 

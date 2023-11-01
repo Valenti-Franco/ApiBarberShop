@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using TpiBarberShop.DTOs;
+using TpiBarberShop.DTOs.Punto;
 
 namespace TpiBarberShop.AutoMapper
 {
@@ -7,10 +7,14 @@ namespace TpiBarberShop.AutoMapper
     {
         public PuntoProfile()
         {
-            CreateMap<Entities.EPuntos, DTOs.PuntosDTO>();
-            CreateMap<DTOs.PuntosDTO, Entities.EPuntos>(); 
-            CreateMap<DTOs.PuntosCreacionDTO, Entities.EPuntos>();
-            CreateMap<DTOs.PuntosActualizarDTO, Entities.EPuntos>();
+            CreateMap<Entities.EPuntos, PuntosDTO>();
+            CreateMap<PuntosDTO, Entities.EPuntos>();
+
+
+            CreateMap<Entities.EPuntos, PuntosFilterDTO>();
+     
+            CreateMap<PuntosCreacionDTO, Entities.EPuntos>();
+            CreateMap<PuntosActualizarDTO, Entities.EPuntos>();
 
 
         }

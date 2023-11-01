@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
+using TpiBarberShop.Utils;
+using TpiBarberShop.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,16 +47,32 @@ builder.Services.AddSwaggerGen(setupAction =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<ProductosData>();
+//builder.Services.AddSingleton<ProductosData>();
 builder.Services.AddSingleton<UsuariosData>();
 
-//builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite(
-//    builder.Configuration["ConnectionStrings:InfoCiudadesDBConnectionString"]));
-builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:BarberDBConnectionString"]));
+//builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:InfoCiudadesDBConnectionString"]));
+builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite("Filename=./BarberShop.db"));
+
+//builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:BarberDBConnectionString"]));
+//builder.Services.AddDbContext<Context>(dbContextOptions => dbContextOptions.UseSqlServer(builder.Configuration["ConnectionStrings:BarberDBConnectionString"]));
+
+//buide.services.Configure<MercadoPagoOptions>(Configuration.GetSection("MercadoPago"));
+builder.Services.Configure<MercadoPagoOptions>(builder.Configuration.GetSection("MercadoPago"));
+
 
 builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
 builder.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
 builder.Services.AddScoped<IComprasRepository, ComprasRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
+builder.Services.AddScoped<IOrdenCompraRepository, OrdenCompraRepository>();
+builder.Services.AddScoped<IDetalleCompraRepository, DetalleCompraRepository>();
+builder.Services.AddScoped<IImagesRepository, ImagesRepository>();
+builder.Services.AddScoped<PayPalClientApi>();
+
+
+
+
 
 
 builder.Services.AddAuthentication("Bearer") //"Bearer" es el tipo de auntenticación que tenemos que elegir después en PostMan para pasarle el token
@@ -77,13 +95,25 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
 if (app.Environment.IsDevelopment())
+
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+app.UseCors(builder =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    builder.AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod();
+});
 
 app.UseHttpsRedirection();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 

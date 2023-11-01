@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using TpiBarberShop.Services;
 using TpiBarberShop.Entities;
-using TpiBarberShop.DTOs;
-using TpiBarberShop.Migrations;
+using TpiBarberShop.DTOs.Compra;
 
 namespace TpiBarberShop.Controllers
 {
@@ -24,9 +23,9 @@ namespace TpiBarberShop.Controllers
             _ComprasRepository = ComprasRepository;
             _mapper = mapper;
         }
-        [HttpPost("{id}")]
+        [HttpPost("{id}/{Cantidad}")]
         [Authorize]
-        public ActionResult ComprarProducto(int id)
+        public ActionResult ComprarProducto(int id, int Cantidad)
         {
             var producto = _repository.GetProducto(id);
             
@@ -43,10 +42,10 @@ namespace TpiBarberShop.Controllers
 
                 try
                 {
-                    _ComprasRepository.CrearNuevaCompra(usuarioActual.Id, producto.Id);
-                    _repository.ReducirStock(producto);
-                    _ComprasRepository.GuardarCambios();
-                  
+                    _repository.ReducirStock(producto, Cantidad);
+                    _ComprasRepository.CrearNuevaCompra(usuarioActual.Id, producto.Id, Cantidad);
+                    _repository.GuardarCambios();
+
 
                 }
                 catch (Exception ex)
@@ -60,7 +59,23 @@ namespace TpiBarberShop.Controllers
             string mensajeError = "El Producto actual no se pudo encontrar.";
             return NotFound(mensajeError);
         }
+        [HttpGet("usuario/{idUsuario}")]
+        [Authorize]
+        public IActionResult GetOrdenCompraUser(int idUsuario)
+        {
+            var usuarioId = User.FindFirstValue("sub");
+            var usuarioActual = ObtenerUsuarioActual(usuarioId);
+            if (usuarioActual.Role != "Admin")
+            {
+                if (usuarioActual.Id != idUsuario)
+                    return NotFound("No tenes los permisos para ver esta compra");
+            }
 
+            var Compra = _ComprasRepository.GetCompraUser(idUsuario);
+            return Ok(Compra);
+
+
+        }
         [HttpGet("Admin")]
         [Authorize]
         public IActionResult ObtenerCompras()
@@ -72,7 +87,8 @@ namespace TpiBarberShop.Controllers
 
             var compras = _ComprasRepository.GetCompras();
 
-        
+
+            //return Ok(_mapper.Map<CompraDTO>(compras));
 
             return Ok(_mapper.Map<IEnumerable<CompraDTO>>(compras));
         }
@@ -162,8 +178,8 @@ namespace TpiBarberShop.Controllers
             var productoId = compraAEliminar.ProductoId;
             var producto = _repository.GetProducto(productoId);
 
+            _repository.AumentarStock(producto, compraAEliminar.Cantidad);
             _ComprasRepository.EliminarCompra(compraAEliminar);
-            _repository.AumentarStock(producto);
             _repository.GuardarCambios();
 
             return NoContent();

@@ -19,8 +19,8 @@ namespace TpiBarberShop.Services
         public EUsuarios? GetUsuarios(int idUsuario);
         EPuntos? ObtenerPuntoPorUsuarioId(int usuarioId, int id);
         void ActualizarPunto(EPuntos punto);
-        void ReducirStock(EProducto producto);
-        void AumentarStock(EProducto producto);
+        void ReducirStock(EProducto producto, int Cantidad);
+        void AumentarStock(EProducto producto, int Cantidad);
         void EliminarPuntoUser(int usuarioId);
     }
 }

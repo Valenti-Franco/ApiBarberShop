@@ -23,11 +23,26 @@ namespace TpiBarberShop.Entities
 
         public string? Descripcion { get; set; }
 
+        [ForeignKey("CategoryId")]
+        public int CategoryId { get; set; }
+        public ECategory category { get; set; }
+
+        [ForeignKey("SubcategoryId")]
+
+        public int SubcategoryId { get; set; }
+        public ESubcategory Subcategory { get; set; }
+
+        public ICollection<EImagenProducto> Imagenes { get; set; }
         public ICollection<EPuntos> Puntos { get; set; }
+        public ICollection<ECompras> Compras { get; set; }
+        public ICollection<EDetalleCompra> DetalleCompra { get; set; }
+
+        public DateTime FechaPublicado { get; private set; }
 
         public EProducto(string nombre)
         {
             Nombre = nombre;
+            FechaPublicado = DateTime.Now;
         }
     }
 }
